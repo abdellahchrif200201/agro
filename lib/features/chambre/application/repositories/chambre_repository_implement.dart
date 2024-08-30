@@ -42,7 +42,7 @@ class ChambreRepositoryImplement implements ChambresRepository {
         final remoteChambresResponse = await chambreRemoteDataSource.getAllChambre();
         final filteredChambres = remoteChambresResponse.where((chambre) {
           final createdAt = chambre.createdAtDateTime;
-          return createdAt.isAfter(dateRange.start) && createdAt.isBefore(dateRange.end);
+          return createdAt!.isAfter(dateRange.start) && createdAt.isBefore(dateRange.end);
         }).toList();
         return right(filteredChambres);
       } on ServerException {
@@ -76,6 +76,35 @@ class ChambreRepositoryImplement implements ChambresRepository {
       }
     } else {
       return left(OfflineFailure());
+    }
+  }
+  
+  @override
+  Future<Either<Failure, Unit>> addChambre(Chambre chambre) async {
+    if (await networkInfo.isConnected) {
+      final chambreModel = ChambreModel(name: chambre.name ,surface: chambre.surface ,temperature: chambre.temperature ,zoneId: chambre.zoneId , entrepriseICE: chambre.entrepriseICE);
+      try {
+        return await _getMessage(() => chambreRemoteDataSource.addChambre(chambreModel));
+      } catch (e) {
+        print('add chambres Repo Error: $e'); // Print the exact error caught
+        return Left(ServerFailure());
+      }
+    } else {
+      print('No internet connection');
+      return Left(OfflineFailure());
+    }
+  }
+
+
+  
+
+  Future<Either<Failure, T>> _getMessage<T>(Future<T> Function() call) async {
+    try {
+      final result = await call();
+      return Right(result);
+    } catch (e) {
+      print('Error in _getMessage: $e'); // Print error in detail
+      return Left(ServerFailure());
     }
   }
 

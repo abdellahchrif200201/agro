@@ -49,7 +49,7 @@ class Tracbalite extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppbar(
-        elvation: 1,
+        elevation: 1,
         title: "Tracbalite",
         trailingIcon: const FaIcon(
           FontAwesomeIcons.circlePlus,

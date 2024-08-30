@@ -47,7 +47,7 @@ class Etiquetage extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppbar(
-        elvation: 1,
+        elevation: 1,
         title: "Etiquetage",
         trailingIcon: const FaIcon(
           FontAwesomeIcons.circlePlus,

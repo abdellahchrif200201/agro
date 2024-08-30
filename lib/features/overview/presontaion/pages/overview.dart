@@ -1,4 +1,6 @@
+import 'package:devti_agro/core/utils/token_utils.dart';
 import 'package:devti_agro/core/widgets/date_range_picker/date_range_picker.dart';
+import 'package:devti_agro/features/overview/domain/entities/task.dart';
 import 'package:devti_agro/features/overview/presontaion/bloc/tasks_bloc.dart';
 import 'package:devti_agro/features/overview/presontaion/widgets/StatisticCard.dart';
 import 'package:devti_agro/features/overview/presontaion/widgets/tasks_card.dart';
@@ -14,6 +16,19 @@ class OverViewTabView extends StatefulWidget {
 }
 
 class _OverViewTabViewState extends State<OverViewTabView> {
+  late bool isTokenAvailable = false; // Initialize with a default value
+
+  @override
+  void initState() {
+    super.initState();
+    checkTokenAvailability();
+  }
+
+  Future<void> checkTokenAvailability() async {
+    isTokenAvailable = await isTokenPresent();
+    setState(() {}); // Update the state after async operation
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -31,10 +46,7 @@ class _OverViewTabViewState extends State<OverViewTabView> {
                 index: 1,
                 child: Text(
                   "158",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontSize: 19),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 19),
                 ),
               ),
               StatisticCard(
@@ -43,10 +55,7 @@ class _OverViewTabViewState extends State<OverViewTabView> {
                 index: 2,
                 child: Text(
                   "11°C",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontSize: 19),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 19),
                 ),
               ),
               StatisticCard(
@@ -55,10 +64,7 @@ class _OverViewTabViewState extends State<OverViewTabView> {
                 index: 4,
                 child: Text(
                   "45",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontSize: 19),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 19),
                 ),
               ),
               StatisticCard(
@@ -67,10 +73,7 @@ class _OverViewTabViewState extends State<OverViewTabView> {
                 index: 4,
                 child: Text(
                   "25",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontSize: 19),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 19),
                 ),
               ),
             ],
@@ -99,8 +102,7 @@ class _OverViewTabViewState extends State<OverViewTabView> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Dernières tâches",
-                    style: Theme.of(context).textTheme.labelMedium),
+                Text("Dernières tâches", style: Theme.of(context).textTheme.labelMedium),
                 Text(
                   "Vous avez des tâches à accomplir",
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -111,25 +113,34 @@ class _OverViewTabViewState extends State<OverViewTabView> {
               ],
             ),
           ),
-          SizedBox(height: 20,),
-          BlocBuilder<TasksBloc, TasksState>(
-            builder: (context, state) {
-              if (state is LoadingTasksState) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is LoadedTasksState) {
-                final tasks = state.tasks;
-                return Column(
-                  children: tasks.map((task) {
-                    return TasksCard(task: task);
-                  }).toList(),
-                );
-              } else if (state is ErrorTasksState) {
-                return Center(child: Text("Failed to load tasks"));
-              } else {
-                return const SizedBox(); // Placeholder if no tasks state
-              }
-            },
+          SizedBox(
+            height: 20,
           ),
+          isTokenAvailable
+              ? BlocBuilder<TasksBloc, TasksState>(
+                  builder: (context, state) {
+                    if (state is LoadingTasksState) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is LoadedTasksState) {
+                      final tasks = state.tasks;
+                      return Column(
+                        children: tasks.map((task) {
+                          return TasksCard(task: task);
+                        }).toList(),
+                      );
+                    } else if (state is ErrorTasksState) {
+                      return Center(child: Text("Failed to load tasks"));
+                    } else {
+                      return const SizedBox(); // Placeholder if no tasks state
+                    }
+                  },
+                )
+              : Column(
+                  children: [
+                    TasksCard(task: Tasks(id: 1, taskName: "taskName", status: "status", message: "message", description: "description")),
+                    TasksCard(task: Tasks(id: 1, taskName: "taskName", status: "status", message: "message", description: "description")),
+                  ],
+                )
         ],
       ),
     );

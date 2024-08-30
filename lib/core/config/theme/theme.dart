@@ -44,7 +44,7 @@ class AppTheme {
       scaffoldBackgroundColor: backgroundColor,
       appBarTheme: AppBarTheme(
         elevation: 0,
-        color: Color.fromARGB(255, 148, 143, 143),
+        color: Colors.white,
         centerTitle: true,
         titleTextStyle: TextStyle(
           color: Colors.black45,

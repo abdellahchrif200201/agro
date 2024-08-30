@@ -1,11 +1,7 @@
 import 'dart:io';
-
-import 'package:devti_agro/core/widgets/Custom_dropdown/DropDown.dart';
+import 'package:devti_agro/core/widgets/Custom_dropdown/dorp_down_two.dart';
 import 'package:devti_agro/core/widgets/Custom_form_element/FomElement.dart';
-import 'package:devti_agro/core/widgets/date_range_picker/SingleDatePicker.dart';
 import 'package:devti_agro/features/Etiquetage/presontation/widgets/InformationOptionel.dart';
-import 'package:devti_agro/features/Etiquetage/presontation/widgets/LocalContainer.dart';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,6 +13,8 @@ class CreateEquetage extends StatefulWidget {
 }
 
 class _CreateEquetageState extends State<CreateEquetage> {
+  final TextEditingController _dateController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
   List<XFile>? _imageFiles = []; // Change to a list to support multiple images
 
@@ -25,6 +23,26 @@ class _CreateEquetageState extends State<CreateEquetage> {
     if (pickedFiles != null) {
       setState(() {
         _imageFiles = pickedFiles;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        _dateController.text = "${picked.toLocal()}".split(' ')[0];
       });
     }
   }
@@ -54,27 +72,30 @@ class _CreateEquetageState extends State<CreateEquetage> {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.date_range),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        "Date",
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ],
+              FormElement(
+                hint: "Select date",
+                label: "Date",
+                child: TextFormField(
+                  controller: _dateController,
+                  decoration: const InputDecoration(
+                    hintText: "Select date", // Add hint text here
+                    hintStyle: TextStyle(color: Colors.grey), // Optional: Style the hint text
+                    border: InputBorder.none, // Keep the border removed
                   ),
-                  const LocalContainer(child: SingleDatePicker()),
-                ],
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _selectDate(context);
+                  },
+                ),
               ),
               const SizedBox(height: 16),
-              Dropdown(
-                dropDownItem: ["fait", "overt"],
+              const FormElement(
                 hint: "select your type",
-                label: "type",
+                label: 'type',
+                child: DropdownTwo(
+                  dropDownItems: ["fait", "overt"],
+                  hint: "select your type",
+                ),
               ),
               const SizedBox(height: 16),
               const Divider(

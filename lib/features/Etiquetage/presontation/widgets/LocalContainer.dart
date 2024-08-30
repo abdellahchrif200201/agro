@@ -4,12 +4,8 @@ class LocalContainer extends StatelessWidget {
   final Widget? child;
   final double? paddingHor;
 
-
-  const LocalContainer({
-    super.key,
-    this.child,
-    this.paddingHor  // Default padding if not provided
-  });
+  const LocalContainer({super.key, this.child, this.paddingHor // Default padding if not provided
+      });
 
   @override
   Widget build(BuildContext context) {

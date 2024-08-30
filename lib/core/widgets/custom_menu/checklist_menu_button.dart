@@ -9,6 +9,7 @@ class ChecklistMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
+      color: Colors.amber,
       icon: const FaIcon(
         FontAwesomeIcons.ellipsis,
         color: Colors.black,

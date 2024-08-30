@@ -56,6 +56,12 @@ dependencies:
   timeago: ^3.7.0
   star_menu: ^4.0.1
   popover: ^0.3.0+1
+  shared_preferences: ^2.3.2
+  loading_animation_widget: ^1.2.1
+  popup_menu: ^2.0.0
+  ionicons: ^0.2.2
+  get: ^4.6.6
+  awesome_dialog: ^3.2.1
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +90,7 @@ flutter:
     - assets/translations/
     - assets/images/
     - assets/icons/svgs/
+    - assets/icon/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

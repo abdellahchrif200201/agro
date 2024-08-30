@@ -1,4 +1,5 @@
 import 'package:devti_agro/core/config/theme/palette.dart';
+import 'package:devti_agro/core/widgets/custom_login/Custom_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,8 +13,9 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? trailingAction; // Action for the trailing button
   final Widget? scIcon; // Optional: Icon for additional action
   final VoidCallback? scAction; // Optional: Action for the additional icon
-  final double? elvation; // Elevation parameter (no default value here)
+  final double? elevation; // Elevation parameter (no default value here)
   final Color? color;
+  final bool isShowLogin;
 
   const CustomAppbar(
       {Key? key,
@@ -21,10 +23,11 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       this.leadingIcon,
       this.leadingAction,
       this.trailingIcon,
+      this.isShowLogin = false,
       this.trailingAction,
       this.scIcon,
       this.scAction,
-      this.elvation, // No default value here
+      this.elevation, // No default value here
       this.color})
       : super(key: key);
 
@@ -32,14 +35,20 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: color ?? Color(0xffFAFAFA),
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+          if (isShowLogin) CustomLogin()
+        ],
       ),
       centerTitle: true,
-      elevation: elvation ?? 3.0, // Provide a default value if elvation is null
+      elevation: elevation ?? 3.0, // Provide a default value if elvation is null
       leading: leadingIcon != null
           ? IconButton(
               color: primaryColor,

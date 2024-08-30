@@ -7,5 +7,6 @@ abstract class ChambresRepository{
   Future<Either<Failure , List<Chambre>>> getAllChambres();
   Future<Either<Failure , List<Chambre>>> getChambresByDateRange(DateTimeRange dateRange);
   Future<Either<Failure , List<Chambre>>> getChambresByName(String name);
+  Future<Either<Failure, Unit>> addChambre(Chambre chambre);
 }
 

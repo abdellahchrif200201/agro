@@ -1,4 +1,3 @@
-import 'package:devti_agro/core/router/routes.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
 import 'package:devti_agro/core/widgets/custom_data_table/custom_data_table.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
@@ -6,12 +5,12 @@ import 'package:devti_agro/core/widgets/custom_filter_button/CustomFilter.dart';
 import 'package:devti_agro/core/widgets/date_range_picker/date_range_picker.dart';
 import 'package:devti_agro/core/widgets/loading_widget.dart';
 import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
-import 'package:devti_agro/features/chambre/presontaion/bloc/chambres_bloc.dart';
+import 'package:devti_agro/features/chambre/presontaion/Chambres/CreateChambre.dart';
+import 'package:devti_agro/features/chambre/presontaion/bloc/get_chambres_bloc/chambres_bloc.dart';
 import 'package:devti_agro/features/chambre/presontaion/widgets/chambre_filter_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 
 class ChambreWidget extends StatefulWidget {
   const ChambreWidget({super.key});
@@ -37,7 +36,8 @@ class _ChambreWidgetState extends State<ChambreWidget> {
 
     return Scaffold(
       appBar: CustomAppbar(
-        elvation: 1,
+        isShowLogin: false,
+        elevation: 1,
         title: "Chambres",
         trailingIcon: const FaIcon(
           FontAwesomeIcons.circlePlus,
@@ -45,7 +45,10 @@ class _ChambreWidgetState extends State<ChambreWidget> {
           size: 30,
         ),
         trailingAction: () {
-          GoRouter.of(context).pushNamed(AppRoutes.etiquetageCreate);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateChambre()),
+          );
         },
       ),
       drawer: const CustomDrawer(currentRoute: "Chambres"),

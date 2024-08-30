@@ -1,16 +1,17 @@
-import 'package:devti_agro/core/router/routes.dart';
+// import 'package:devti_agro/core/router/routes.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/core/widgets/custom_filter_button/CustomFilter.dart';
 import 'package:devti_agro/core/widgets/date_range_picker/date_range_picker.dart';
 import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
 import 'package:devti_agro/features/Checklist/presontation/bloc/check_list_bloc.dart';
+import 'package:devti_agro/features/Checklist/presontation/screens/create_Checklist.dart';
 import 'package:devti_agro/features/Checklist/presontation/widgets/check_list_filter_helper.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 
 import '../widgets/Checklist_card.dart';
 
@@ -38,7 +39,8 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
 
     return Scaffold(
       appBar: CustomAppbar(
-        elvation: 1,
+        isShowLogin: false,
+        elevation: 1,
         title: "Checklist",
         trailingIcon: const FaIcon(
           FontAwesomeIcons.circlePlus,
@@ -46,7 +48,11 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
           size: 30,
         ),
         trailingAction: () {
-          GoRouter.of(context).pushNamed(AppRoutes.checklistCreate);
+          // GoRouter.of(context).pushNamed(AppRoutes.checklistCreate);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateChecklist()), // Replace NextPage with your target page
+          );
         },
       ),
       drawer: const CustomDrawer(
