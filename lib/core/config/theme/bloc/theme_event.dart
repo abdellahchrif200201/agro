@@ -1,8 +1,28 @@
-part of 'theme_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-sealed class ThemeEvent {}
+abstract class ThemeEvent extends Equatable {
+  const ThemeEvent();
 
-class ThemeChanged extends ThemeEvent{
-  final bool isDark;
-  ThemeChanged({required this.isDark});
+  @override
+  List<Object> get props => [];
 }
+
+class ToggleDarkMode extends ThemeEvent {
+  final bool isDarkMode;
+
+  const ToggleDarkMode({required this.isDarkMode});
+
+  @override
+  List<Object> get props => [isDarkMode];
+}
+
+class UpdateTimeZone extends ThemeEvent {
+  final String timeZone;
+
+  const UpdateTimeZone({required this.timeZone});
+
+  @override
+  List<Object> get props => [timeZone];
+}
+
+class LoadThemeSettings extends ThemeEvent {}

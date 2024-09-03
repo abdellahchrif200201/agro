@@ -1,7 +1,6 @@
 import 'dart:io';
-
 import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
-import 'package:devti_agro/core/config/theme/palette.dart';
+import 'package:devti_agro/core/config/theme/bloc/theme_event.dart';
 import 'package:devti_agro/features/auth/login/presontaion/screens/login_screen.dart';
 import 'package:devti_agro/features/profile/prsentaion/screens/add_user_screen.dart';
 import 'package:devti_agro/features/profile/prsentaion/screens/all_users_screen.dart';
@@ -51,9 +50,10 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeBloc = BlocProvider.of<ThemeBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -72,7 +72,7 @@ class _AccountScreenState extends State<AccountScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Settings",
+                "Paramètres",
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               const SizedBox(height: 40),
               const Text(
-                "Account",
+                "Compte",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
@@ -131,7 +131,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     const Spacer(),
                     ForwardButton(
                       onTap: () {
-                        if (5 == 6) {
+                        if (5 == 5) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const EditAccountScreen()),
@@ -141,11 +141,11 @@ class _AccountScreenState extends State<AccountScreen> {
                             context: context,
                             dialogType: DialogType.info,
                             animType: AnimType.rightSlide,
-                            title: 'login',
-                            desc: 'you are not login ?',
+                            title: 'Connexion',
+                            desc: " Vous n'êtes pas connecté(e)",
                             titleTextStyle: Theme.of(context).textTheme.titleMedium,
                             descTextStyle: Theme.of(context).textTheme.titleMedium,
-                            btnOkText: 'conextion',
+                            btnOkText: 'Connexion',
                             btnCancelOnPress: () {},
                             btnOkOnPress: () => Navigator.push(
                               context,
@@ -168,12 +168,12 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               const SizedBox(height: 20),
               SettingItem(
-                title: "add user",
+                title: "Ajouter un utilisateur",
                 icon: Ionicons.add_circle,
                 bgColor: Colors.blue.shade100,
                 iconColor: Colors.blue,
                 onTap: () {
-                  if (5 == 6) {
+                  if (5 == 5) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const AddUserScreen()),
@@ -204,7 +204,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 bgColor: Colors.blue.shade100,
                 iconColor: Colors.blue,
                 onTap: () {
-                  if (5 == 6) {
+                  if (5 == 5) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const AllUsersScreen()),
@@ -226,6 +226,20 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                     ).show();
                   }
+                },
+              ),
+              const SizedBox(height: 20),
+              SettingSwitch(
+                title: "Dark Mode",
+                icon: Ionicons.earth,
+                bgColor: Colors.purple.shade100,
+                iconColor: Colors.purple,
+                value: themeBloc.state.isDarkMode,
+                onTap: (value) {
+                  setState(() {
+                    themeBloc.add(ToggleDarkMode(isDarkMode: value));
+                    ;
+                  });
                 },
               ),
               const SizedBox(height: 20),

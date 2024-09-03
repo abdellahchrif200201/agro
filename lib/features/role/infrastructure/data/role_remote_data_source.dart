@@ -3,11 +3,12 @@ import 'package:devti_agro/core/error/exeptions.dart';
 import 'package:devti_agro/features/role/aplication/model/role_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/api/api_route.dart';
+
 abstract class RoleRemoteDataSource {
   Future<List<RoleModel>> getAllRole();
 }
 
-const BASE_URL = "https://agroapp.devtitechnologie.pro/api";
 
 class RoleRemoteDataSourceImplement implements RoleRemoteDataSource {
   final http.Client client;

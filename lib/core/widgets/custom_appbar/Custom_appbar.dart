@@ -1,6 +1,8 @@
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/config/theme/palette.dart';
 import 'package:devti_agro/core/widgets/custom_login/Custom_login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // Ensure this import is correct
@@ -18,7 +20,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowLogin;
 
   const CustomAppbar(
-      {Key? key,
+      {super.key,
       required this.title,
       this.leadingIcon,
       this.leadingAction,
@@ -28,15 +30,15 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       this.scIcon,
       this.scAction,
       this.elevation, // No default value here
-      this.color})
-      : super(key: key);
+      this.color});
 
   @override
   Widget build(BuildContext context) {
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
     return AppBar(
-      backgroundColor: color ?? Color(0xffFAFAFA),
+      backgroundColor: themeBloc ? const Color(0xff000000) : const Color(0xffFAFAFA),
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: isShowLogin ? MainAxisAlignment.center : MainAxisAlignment.center,
         children: [
           Text(
             title,
@@ -44,10 +46,10 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                   fontWeight: FontWeight.w500,
                 ),
           ),
-          if (isShowLogin) CustomLogin()
+          if (isShowLogin) const CustomLogin()
         ],
       ),
-      centerTitle: true,
+      centerTitle: false,
       elevation: elevation ?? 3.0, // Provide a default value if elvation is null
       leading: leadingIcon != null
           ? IconButton(
@@ -75,5 +77,5 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

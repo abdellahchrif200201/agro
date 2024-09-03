@@ -1,9 +1,9 @@
 import 'package:devti_agro/core/widgets/Custom_dropdown/dorp_down_two.dart';
 import 'package:devti_agro/core/widgets/Custom_form_element/FomElement.dart';
 import 'package:devti_agro/core/widgets/custom_button/custom_btn.dart';
+import 'package:devti_agro/features/permission/aplication/bloc/add_role_bloc/bloc/permission_bloc.dart';
 import 'package:devti_agro/features/profile/prsentaion/widgets/edit_item.dart';
 import 'package:devti_agro/features/role/aplication/bloc/add_role_bloc/bloc/role_bloc.dart';
-import 'package:devti_agro/features/zone/aplication/bloc/zone/bloc/zone_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
@@ -17,7 +17,7 @@ class AddUserScreen extends StatefulWidget {
 }
 
 class _AddUserScreenState extends State<AddUserScreen> {
-  String? selectedZone;
+  String? selectedPermission;
   String? selectedRole;
 
   @override
@@ -103,9 +103,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   color: Colors.grey,
                 ),
                 label: "permission",
-                child: BlocBuilder<ZoneBloc, ZoneState>(
+                child: BlocBuilder<PermissionBloc, PermissionState>(
                   builder: (context, state) {
-                    if (state is LoadingZoneState) {
+                    if (state is LoadingPermissionState) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                         child: Row(
@@ -119,13 +119,13 @@ class _AddUserScreenState extends State<AddUserScreen> {
                           ],
                         ),
                       );
-                    } else if (state is LoadedZoneState) {
-                      final List<String> options = state.zone.map((zone) => zone.name).toList();
+                    } else if (state is LoadedPermissionState) {
+                      final List<String> options = state.permissions.map((zone) => zone.name).toList();
 
-                      // Reset selectedZone if it is not in the options
-                      if (selectedZone != null && !options.contains(selectedZone)) {
+                      // Reset selectedPermission if it is not in the options
+                      if (selectedPermission != null && !options.contains(selectedPermission)) {
                         setState(() {
-                          selectedZone = options.isNotEmpty ? options[0] : null;
+                          selectedPermission = options.isNotEmpty ? options[0] : null;
                         });
                       }
 
@@ -134,11 +134,11 @@ class _AddUserScreenState extends State<AddUserScreen> {
                         dropDownItems: options,
                         onChanged: (value) {
                           setState(() {
-                            selectedZone = value;
+                            selectedPermission = value;
                           });
                         },
                       );
-                    } else if (state is ErrorZoneState) {
+                    } else if (state is ErrorPermissionState) {
                       return Center(
                         child: Text(
                           state.message,

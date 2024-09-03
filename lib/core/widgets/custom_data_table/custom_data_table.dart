@@ -27,7 +27,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
     return SingleChildScrollView(
       child: Theme(
         data: Theme.of(context).copyWith(
-          dividerColor: Color(0xFFD8D8D8),
+          dividerColor: const Color(0xFFD8D8D8),
         ),
         child: PaginatedDataTable(
           rowsPerPage: 12,
@@ -39,7 +39,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
             // });
           },
           sortAscending: isAscendingOrder,
-          headingRowColor: WidgetStatePropertyAll(Color(0xffFAFAFA)),
+          headingRowColor: const WidgetStatePropertyAll(Color(0xffFAFAFA)),
           showCheckboxColumn: true,
           sortColumnIndex: sortColumnIndex,
           columnSpacing: 20.w,
@@ -51,7 +51,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                   headerTitle,
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Color(0xff727272),
+                        color: const Color(0xff727272),
                       ),
                 ),
                 onSort: (int columnIndex, bool ascending) {
@@ -115,7 +115,7 @@ class _DataSource extends DataTableSource {
             cell,
             textAlign: TextAlign.start,
             style: TextStyle(
-              color: Color(0xff000000),
+              color: const Color(0xff000000),
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
             ),
@@ -129,7 +129,7 @@ class _DataSource extends DataTableSource {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Chip(
                       visualDensity: VisualDensity.compact,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

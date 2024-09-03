@@ -4,7 +4,7 @@ class NutritionModel extends Nutrition {
   NutritionModel({
     required super.id,
     required super.name,
-    required super.fournisseur,
+    // required super.fournisseur,
     required super.barCode,
     required super.dateDLC,
     required super.dateDDM,
@@ -16,7 +16,7 @@ class NutritionModel extends Nutrition {
     return NutritionModel(
       id: json['id'],
       name: json['Name'], // Correctly mapping the 'Name' from JSON
-      fournisseur: json['Fournisseur'] != null ? json['Fournisseur']['name'] : '', // Handling nested JSON for fournisseur
+      // fournisseur: json['Fournisseur']['name'] , // Handling nested JSON for fournisseur
       barCode: json['BarCode'], // Assuming 'barCode' is a string, convert if needed
       dateDLC: json['DLCDate'], // Parsing date from JSON
       dateDDM: json['DDMDate'],
@@ -29,7 +29,7 @@ class NutritionModel extends Nutrition {
     return {
       'id': id,
       'name': name,
-      'fournisseur': fournisseur,
+      // 'fournisseur': fournisseur,
       'barCode': barCode,
       'dateDLC': dateDLC,
       'dateDDM': dateDDM,

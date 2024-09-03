@@ -1,8 +1,11 @@
+import 'package:devti_agro/features/profile/prsentaion/screens/full_user_information.dart';
+import 'package:devti_agro/features/user/domain/entities/user.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ListUser extends StatelessWidget {
-  const ListUser({super.key});
+  final User user;
+  const ListUser({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +24,22 @@ class ListUser extends StatelessWidget {
                     ),
                     fit: BoxFit.cover)),
           ),
-          title: const Text(
-            'John Doe',
+          title: Text(
+            user.name,
             style: TextStyle(color: Colors.black),
           ),
           subtitle: const Text('johndoe@gmail.com'),
-          trailing: const FaIcon(FontAwesomeIcons.circleArrowRight),
+          trailing: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FullUserInformation(
+                            user: user,
+                          )),
+                );
+              },
+              child: const FaIcon(FontAwesomeIcons.circleArrowRight)),
         ));
   }
 }

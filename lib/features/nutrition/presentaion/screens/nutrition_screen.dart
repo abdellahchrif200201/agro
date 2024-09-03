@@ -1,41 +1,42 @@
-import 'package:devti_agro/core/router/routes.dart';
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
 import 'package:devti_agro/core/widgets/custom_data_table/custom_data_table.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/core/widgets/custom_filter_button/CustomFilter.dart';
+import 'package:devti_agro/core/widgets/custom_refresh_error/refresh_data_in_screen.dart';
 import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
-import 'package:devti_agro/features/nutrition/presentaion/bloc/nutrition_bloc.dart';
+import 'package:devti_agro/features/nutrition/application/bloc/nutrition_bloc.dart';
+import 'package:devti_agro/features/nutrition/presentaion/screens/create_tracbalite_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/widgets/loading_widget.dart';
 
 class NutritionScreen extends StatelessWidget {
   const NutritionScreen({super.key});
 
-    // void _openFilterSheet(BuildContext context) {
-    //   showFilterBottomSheet(
-    //     context: context,
-    //     title: 'Filter by',
-    //     filterOptions: ['Nom Ascending', 'Nom Descending', 'Quantite'],
-    //     filterActions: {
-    //       'Nom Ascending': () {
-    //         BlocProvider.of<NutritionBloc>(context).add(const FilterNutristionEvent(filterType: 'nom', isAscending: true));
-    //         context.pop();
-    //       },
-    //       'Nom Descending': () {
-    //         BlocProvider.of<NutristionBloc>(context).add(const FilterNutristionEvent(filterType: 'nom', isAscending: false));
-    //         context.pop();
-    //       },
-    //       'Quantite': () {
-    //         BlocProvider.of<NutristionBloc>(context).add(const FilterNutristionEvent(filterType: 'quantite'));
-    //         context.pop();
-    //       }
-    //     },
-    //   );
-    // }
+  // void _openFilterSheet(BuildContext context) {
+  //   showFilterBottomSheet(
+  //     context: context,
+  //     title: 'Filter by',
+  //     filterOptions: ['Nom Ascending', 'Nom Descending', 'Quantite'],
+  //     filterActions: {
+  //       'Nom Ascending': () {
+  //         BlocProvider.of<NutritionBloc>(context).add(const FilterNutristionEvent(filterType: 'nom', isAscending: true));
+  //         context.pop();
+  //       },
+  //       'Nom Descending': () {
+  //         BlocProvider.of<NutristionBloc>(context).add(const FilterNutristionEvent(filterType: 'nom', isAscending: false));
+  //         context.pop();
+  //       },
+  //       'Quantite': () {
+  //         BlocProvider.of<NutristionBloc>(context).add(const FilterNutristionEvent(filterType: 'quantite'));
+  //         context.pop();
+  //       }
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +46,15 @@ class NutritionScreen extends StatelessWidget {
     //   context.read<NutristionBloc>().add(FilterNutristionByDateRangeEvent(dateRange: dateRange));
     // }
 
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
+
     return Scaffold(
       appBar: CustomAppbar(
         elevation: 1,
         title: "Nutrition",
-        trailingIcon: const FaIcon(
+        trailingIcon: FaIcon(
           FontAwesomeIcons.circlePlus,
-          color: Colors.black,
+          color: themeBloc ? Colors.white : Colors.black,
           size: 30,
         ),
         scIcon: Container(
@@ -62,7 +65,10 @@ class NutritionScreen extends StatelessWidget {
               size: 20,
             )),
         trailingAction: () {
-          GoRouter.of(context).pushNamed(AppRoutes.traceabilityCreate);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateTracbaliteScreen()),
+          );
         },
       ),
       drawer: const CustomDrawer(currentRoute: "Nutrition"),
@@ -76,10 +82,10 @@ class NutritionScreen extends StatelessWidget {
               const Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CustomSearchBar(
-                  // onSearchChanged: (searchText) {
-                  //   context.read<NutritionBloc>().add(SearchNutritionEvent(searchText));
-                  // },
-                ),
+                    // onSearchChanged: (searchText) {
+                    //   context.read<NutritionBloc>().add(SearchNutritionEvent(searchText));
+                    // },
+                    ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -108,7 +114,7 @@ class NutritionScreen extends StatelessWidget {
                       (nutrition) {
                         return [
                           nutrition.name, // Name of the item
-                          nutrition.fournisseur, // Unite
+                          nutrition.name, // Unite
                           nutrition.barCode.toString(), // Quantity as a String
                           nutrition.category, // Date DLC from Nutrition
                         ];
@@ -124,8 +130,11 @@ class NutritionScreen extends StatelessWidget {
                       ),
                     );
                   } else if (state is ErrorNutritionState) {
-                    return Center(
-                      child: Text(state.message),
+                    return RefreshDataInScreen(
+                      message: state.message,
+                      onPressed: () {
+                        context.read<NutritionBloc>().add(RefreshNutritionEvent());
+                      },
                     );
                   }
                   return const LoadingWidget();

@@ -8,5 +8,10 @@ class Chambre {
   final double surface;
   final double temperature;
   final String? createdAt;
+
+
+  
   Chambre({ this.id, required this.name,  this.zoneName,  this.entrepriseName, required this.surface, required this.temperature,  this.createdAt , this.entrepriseICE , this.zoneId});
 }
+
+

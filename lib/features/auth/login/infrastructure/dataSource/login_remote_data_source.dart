@@ -5,12 +5,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../../core/api/api_route.dart';
+
 // Abstract class defining the contract for the remote data source
 abstract class LoginRemoteDataSource {
   Future<Unit> loginAuth(LoginModel loginModel);
 }
-
-const BASE_URL = "https://agroapp.devtitechnologie.pro/api/Auth";
 
 // Implementation of the remote data source
 class LoginRemoteDataSourceImpl extends LoginRemoteDataSource {
@@ -26,7 +26,7 @@ class LoginRemoteDataSourceImpl extends LoginRemoteDataSource {
     });
 
     final response = await client.post(
-      Uri.parse('$BASE_URL/Login'),
+      Uri.parse('$BASE_URL/Auth/Login'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -41,7 +41,7 @@ class LoginRemoteDataSourceImpl extends LoginRemoteDataSource {
         final prefs = await SharedPreferences.getInstance();
         final token = responseBody['token'];
         await prefs.setString('auth_token', token);
-        await prefs.setString('name' , responseBody['user']['name'] );
+        await prefs.setString('name', responseBody['user']['name']);
 
         print(responseBody);
         print("Login successful");

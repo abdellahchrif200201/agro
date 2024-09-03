@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:devti_agro/core/error/failures.dart';
-import 'package:devti_agro/features/role/domain/repositories/role_repo.dart';
+import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo.dart';
 import '../../domain/entities/role.dart';
 
 /// A use case to retrieve all zones associated with a specific enterprise.

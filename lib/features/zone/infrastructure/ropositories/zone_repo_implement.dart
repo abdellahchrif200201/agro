@@ -6,7 +6,7 @@ import 'package:devti_agro/core/error/exeptions.dart';
 import 'package:devti_agro/core/error/failures.dart';
 import 'package:devti_agro/core/network/network_info.dart';
 import 'package:devti_agro/features/zone/domain/entities/zone.dart';
-import 'package:devti_agro/features/zone/domain/repositories/zone_repo.dart';
+import 'package:devti_agro/features/zone/infrastructure/ropositories/zone_repo.dart';
 import 'package:devti_agro/features/zone/infrastructure/data/zone_remote_data_source.dart';
 
 class ZoneRepoImplement implements ZoneRepo {

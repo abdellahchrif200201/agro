@@ -1,5 +1,5 @@
 import 'package:devti_agro/core/widgets/Custom_FilterBottomSheet/FilterBottomSheet.dart';
-import 'package:devti_agro/features/chambre/presontaion/bloc/get_chambres_bloc/chambres_bloc.dart';
+import 'package:devti_agro/features/chambre/application/bloc/get_chambres_bloc/chambres_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

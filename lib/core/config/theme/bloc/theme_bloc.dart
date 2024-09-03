@@ -1,17 +1,39 @@
 import 'package:bloc/bloc.dart';
+import 'package:devti_agro/core/config/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'theme_event.dart';
+import 'theme_state.dart';
 
-part 'theme_event.dart';
+class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
+  ThemeBloc()
+      : super(ThemeState(
+          themeData: _buildTheme(false),
+          isDarkMode: false,
+        )) {
+    on<ToggleDarkMode>(_onToggleDarkMode);
+    on<LoadThemeSettings>(_onLoadThemeSettings);
+  }
 
-class ThemeBloc extends Bloc<ThemeEvent, ThemeMode> {
-  ThemeBloc(bool isDark) : super(isDark ? ThemeMode.dark : ThemeMode.light) {
-    on<ThemeChanged>((event, emit) async {
-      emit(event.isDark ? ThemeMode.dark : ThemeMode.light);
+  static ThemeData _buildTheme(bool isDarkMode) {
+    return AppTheme.getTheme(isDark: isDarkMode);
+  }
 
-      // Save the theme preference in SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isDark', event.isDark);
-    });
+  Future<void> _onToggleDarkMode(ToggleDarkMode event, Emitter<ThemeState> emit) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('darkMode', event.isDarkMode);
+    emit(state.copyWith(
+      themeData: _buildTheme(event.isDarkMode),
+      isDarkMode: event.isDarkMode,
+    ));
+  }
+
+  Future<void> _onLoadThemeSettings(LoadThemeSettings event, Emitter<ThemeState> emit) async {
+    final prefs = await SharedPreferences.getInstance();
+    final isDarkMode = prefs.getBool('darkMode') ?? false;
+    emit(state.copyWith(
+      themeData: _buildTheme(isDarkMode),
+      isDarkMode: isDarkMode,
+    ));
   }
 }

@@ -4,7 +4,7 @@ import 'package:devti_agro/core/network/network_info.dart';
 import 'package:devti_agro/features/auth/login/infrastructure/dataSource/login_remote_data_source.dart';
 import 'package:devti_agro/features/auth/login/aplication/model/Login_model.dart';
 import 'package:devti_agro/features/auth/login/domain/entities/login.dart';
-import 'package:devti_agro/features/auth/login/domain/repositories/login_repo.dart';
+import 'package:devti_agro/features/auth/login/infrastructure/repositories/login_repo.dart';
 
 class LoginRepoImplement implements LoginRepo {
   final LoginRemoteDataSource remoteDataSource;

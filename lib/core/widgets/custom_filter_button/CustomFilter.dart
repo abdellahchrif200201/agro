@@ -1,5 +1,7 @@
 import 'package:devti_agro/core/config/constants/assets.dart';
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
@@ -10,6 +12,8 @@ class CustomFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.r),
@@ -31,7 +35,10 @@ class CustomFilter extends StatelessWidget {
           onTap: filterAction,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-            child: SvgPicture.asset(Assets.kSvgFilter),
+            child: SvgPicture.asset(
+              Assets.kSvgFilter,
+              color: themeBloc ? Colors.white : Colors.black,
+            ),
           ),
         ),
       ),

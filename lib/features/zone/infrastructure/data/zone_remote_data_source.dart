@@ -4,11 +4,12 @@ import 'package:devti_agro/core/error/exeptions.dart';
 import 'package:devti_agro/features/zone/aplication/model/zone_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../core/api/api_route.dart';
+
 abstract class ZoneRemoteDataSource {
   Future<List<ZoneModel>> getAllZoneByEntreprise(int idEntreprise);
 }
 
-const BASE_URL = "https://agroapp.devtitechnologie.pro/api";
 
 class ZoneRemoteDataSourceImplement implements ZoneRemoteDataSource {
   final http.Client client;

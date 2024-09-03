@@ -1,30 +1,39 @@
-import 'package:devti_agro/core/router/routes.dart';
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
+import 'package:devti_agro/core/config/theme/palette.dart';
 import 'package:devti_agro/core/widgets/custom_login/Custom_login.dart';
 import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
+import 'package:devti_agro/features/Checklist/presontation/screens/check_list_screen.dart';
+import 'package:devti_agro/features/Nettoyage/Nettoyage_screen.dart';
+import 'package:devti_agro/features/Tracbalite/presentaion/screens/Tracbalite_screen.dart';
+import 'package:devti_agro/features/chambre/presontaion/Chambres/chambre_screen.dart';
+import 'package:devti_agro/features/dashboard/HomePage.dart';
+import 'package:devti_agro/features/nutrition/presentaion/screens/nutrition_screen.dart';
 import 'package:devti_agro/features/profile/prsentaion/screens/account_screen.dart.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../features/Etiquetage/presontation/screens/Etiquetage_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   final String currentRoute;
 
-  const CustomDrawer({Key? key, required this.currentRoute}) : super(key: key);
+  const CustomDrawer({super.key, required this.currentRoute});
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
 }
 
 final List<Map<String, dynamic>> menu = [
-  {"title": "overview", "page": AppRoutes.homePage},
-  {"title": "Nutrition", "page": AppRoutes.temperature},
-  {"title": "Tracbalite", "page": AppRoutes.traceability},
-  {"title": "Nettoyage", "page": AppRoutes.nettoyage},
-  {"title": "Checklist", "page": AppRoutes.checklist},
-  {"title": "Etiquetage", "page": AppRoutes.etiquetage},
-  {"title": "Chambres", "page": AppRoutes.chambres},
+  {"title": "overview", "page": const Homepage()},
+  {"title": "Nutrition", "page": const NutritionScreen()},
+  {"title": "Tracbalite", "page": const TracbaliteScreen()},
+  {"title": "Nettoyage", "page": const NettoyageScreen()},
+  {"title": "Checklist", "page": const ChecklistScreen()},
+  {"title": "Etiquetage", "page": const EtiquetageScreen()},
+  {"title": "Chambres", "page": const ChambreScreen()},
 ];
 
 class _CustomDrawerState extends State<CustomDrawer> {
@@ -41,16 +50,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      name = prefs.getString('name')!;
+      name = prefs.getString('name');
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final userProfileImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+    const userProfileImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
 
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: themeBloc ? Color(0xff000000) : secondaryColor,
       width: MediaQuery.sizeOf(context).width / 1.5,
       child: SafeArea(
         child: Padding(
@@ -58,7 +68,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              if (name == null) CustomLogin(),
+              if (name == null) const CustomLogin(),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -74,7 +84,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundImage: NetworkImage(userProfileImage),
                         radius: 20, // Adjust as needed
                       ),
@@ -125,7 +135,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         });
                         Navigator.pop(context); // Close the drawer
 
-                        context.go(item['page']); // Navigate to the selected page using GoRouter
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => item['page']),
+                        ); // Navigate to the selected page using GoRouter
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -136,7 +149,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             color: _selectedIndex == index ? Colors.green : Colors.transparent, // Only show border for selected item
                             width: 1, // Adjust width as needed
                           ),
-                          color: _selectedIndex == index ? Colors.grey.withOpacity(0.2) : Colors.transparent, // Optional: Add a background color to highlight selected item
+                          color: _selectedIndex == index ? Colors.green.withOpacity(0.2) : Colors.transparent, // Optional: Add a background color to highlight selected item
                         ),
                         child: Center(
                           child: Row(
@@ -145,13 +158,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               Text(
                                 item['title'],
                                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      color: _selectedIndex == index ? Color(0xff000000) : Color(0xff565656),
+                                      color: _selectedIndex == index ? Colors.green : Color.fromARGB(255, 128, 128, 128),
                                     ),
                               ),
                               if (_selectedIndex == index)
                                 const FaIcon(
                                   FontAwesomeIcons.circleCheck,
-                                  color: Colors.black,
+                                  color: Colors.green,
                                 )
                             ],
                           ),

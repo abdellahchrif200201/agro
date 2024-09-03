@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       backgroundColor: Colors.white,
                       child: FaIcon(FontAwesomeIcons.circleChevronRight, color: Colors.green),
-                    )
+                    ),
                   ],
                 );
               },

@@ -8,12 +8,12 @@ class DropdownTwo extends StatefulWidget {
   final ValueChanged<String?>? onChanged;
 
   const DropdownTwo({
-    Key? key,
+    super.key,
     required this.dropDownItems,
     this.label,
     required this.hint,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   _DropdownTwoState createState() => _DropdownTwoState();

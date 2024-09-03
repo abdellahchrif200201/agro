@@ -1,7 +1,8 @@
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/utils/token_utils.dart';
 import 'package:devti_agro/core/widgets/date_range_picker/date_range_picker.dart';
 import 'package:devti_agro/features/overview/domain/entities/task.dart';
-import 'package:devti_agro/features/overview/presontaion/bloc/tasks_bloc.dart';
+import 'package:devti_agro/features/overview/aplication/bloc/tasks_bloc.dart';
 import 'package:devti_agro/features/overview/presontaion/widgets/StatisticCard.dart';
 import 'package:devti_agro/features/overview/presontaion/widgets/tasks_card.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,8 @@ class _OverViewTabViewState extends State<OverViewTabView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -96,7 +99,7 @@ class _OverViewTabViewState extends State<OverViewTabView> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(),
+              border: Border.all(color: themeBloc ? Colors.white : Colors.black, width: 0.5),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

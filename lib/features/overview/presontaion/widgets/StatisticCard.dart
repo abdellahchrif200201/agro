@@ -1,5 +1,7 @@
 // Flutter imports:
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,16 +26,16 @@ class StatisticCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Check the orientation of the device
-    bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
 
     return Expanded(
       child: Container(
-        height: isLandscape ? 500.h : 123.h, // Adjust the height based on orientation
+        height: 123.h, // Adjust the height based on orientation
         padding: EdgeInsets.all(3),
         margin: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black26),
+          border: Border.all(color: themeBloc ? Colors.white : Colors.black, width: 0.2),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -43,8 +45,8 @@ class StatisticCard extends StatelessWidget {
               width: 50.w,
               height: 50.w,
               decoration: BoxDecoration(
-                border: Border.all(),
-                color: bgColor ?? const Color(0xFFF9F9F9),
+                border: Border.all(color: Colors.green),
+                color: bgColor ?? Colors.transparent,
                 borderRadius: BorderRadius.circular(25.r),
               ),
               alignment: Alignment.center,

@@ -1,10 +1,13 @@
-
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
+import 'package:devti_agro/core/config/theme/palette.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/features/overview/presontaion/pages/overview.dart';
 
 import 'package:flutter/material.dart';
- // Adjust the import path as necessary
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// Adjust the import path as necessary
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -33,22 +36,43 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
+  String? token; // Initialize with a default value
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      token = prefs.getString('auth_token');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
     return Scaffold(
-        appBar: const CustomAppbar(title: "Dashboard", elevation: 0,isShowLogin: true,), // Use MyAppbar
-        drawer: const CustomDrawer(currentRoute: "overview",),  // Use the new CustomDrawer widget
+      appBar: CustomAppbar(
+        title: "Dashboard",
+        elevation: 0,
+        isShowLogin: token != null ? false : true,
+      ), // Use MyAppbar
+      drawer: const CustomDrawer(
+        currentRoute: "overview",
+      ), // Use the new CustomDrawer widget
       body: Column(
         children: [
           Container(
-
             decoration: BoxDecoration(
-              color: Color(0xffFAFAFA),
+              color: themeBloc ? const Color(0xff000000) : const Color(0xffFAFAFA),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 1,
-                  blurRadius: 5,
+                  blurRadius: 2,
                   offset: Offset(0, 3), // changes position of shadow
                 ),
               ],
@@ -71,17 +95,19 @@ class _HomepageState extends State<Homepage> {
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     margin: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
-                       // Change color based on selection
-                      color: isSelected ? Color(0xffFFFFFF) : null,
+                      // Change color based on selection
+                      color: isSelected
+                          ? themeBloc
+                              ? containerBlack
+                              : containerWhite
+                          : null,
                       borderRadius: BorderRadius.circular(10),
-                      border: isSelected ? Border.all(color: Colors.black26, width: 1) : null, // Add border if selected
+                      border: isSelected ? Border.all(color: themeBloc ? Colors.white : Colors.black) : null, // Add border if selected
                     ),
                     child: Center(
                       child: Text(
                         item,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Colors.black
-                        ),
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(color: themeBloc ? Colors.white : Colors.black),
                       ),
                     ),
                   ),

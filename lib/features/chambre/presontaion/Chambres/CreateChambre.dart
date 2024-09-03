@@ -1,10 +1,14 @@
 import 'package:devti_agro/core/widgets/Custom_dropdown/dorp_down_two.dart';
 import 'package:devti_agro/core/widgets/Custom_form_element/FomElement.dart';
 import 'package:devti_agro/core/widgets/custom_button/custom_btn.dart';
-import 'package:devti_agro/features/chambre/presontaion/bloc/create_chambre_bloc/add_chambre_bloc.dart';
+import 'package:devti_agro/core/widgets/custom_refresh_error/refresh_data_in_dropDown.dart';
+import 'package:devti_agro/features/chambre/application/bloc/create_chambre_bloc/add_chambre_bloc.dart';
+import 'package:devti_agro/features/chambre/application/bloc/get_chambres_bloc/chambres_bloc.dart';
+import 'package:devti_agro/features/chambre/presontaion/Chambres/chambre_screen.dart';
 import 'package:devti_agro/features/zone/aplication/bloc/zone/bloc/zone_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart'; // Fixed import path
 
 class CreateChambre extends StatefulWidget {
@@ -24,11 +28,20 @@ class _CreateChambreState extends State<CreateChambre> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 2,
-        title: const Text('Chambres'),
-        iconTheme: const IconThemeData(
-          color: Colors.black,
+        title: Text(
+          "create chambre",
+          style: TextStyle(color: Colors.black),
         ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Ionicons.chevron_back_outline,
+            color: Theme.of(context).iconTheme.color,
+          ),
+        ),
+        leadingWidth: 80,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -36,10 +49,6 @@ class _CreateChambreState extends State<CreateChambre> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Infos générales',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
               const SizedBox(height: 16),
               FormElement(
                 hint: "Nom",
@@ -86,13 +95,11 @@ class _CreateChambreState extends State<CreateChambre> {
                         },
                       );
                     } else if (state is ErrorZoneState) {
-                      return Center(
-                        child: Text(
-                          state.message,
-                          style: const TextStyle(color: Colors.red, fontSize: 16),
-                        ),
+                      return RefreshData(
+                        onPressed: () => context.read<ZoneBloc>().add(GetAllZoneEvent(idEntreprise: 1)),
                       );
                     }
+
                     return const Center(child: Text("loading ..."));
                   },
                 ),
@@ -128,19 +135,30 @@ class _CreateChambreState extends State<CreateChambre> {
                   context.read<AddChambreBloc>().add(
                         AddChambreButtonPressed(
                           name: name,
-                          entrepriseICE: 87536065, // Adjust as needed
+                          entrepriseICE: 4531847, // Adjust as needed
                           zoneId: 1, // Adjust as needed
                           surface: surface,
                           temperature: temperature,
                         ),
                       );
 
+                  context.read<ChambresBloc>().add(RefreshChambresEvent());
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChambreScreen()));
+
                   // Optionally, you can clear the fields after submitting
-                  nameController.clear();
-                  surfaceController.clear();
-                  temperatureController.clear();
+                  // nameController.clear();
+                  // surfaceController.clear();
+                  // temperatureController.clear();
                 },
-              )
+              ),
+              // Container(
+              //   width: 500,
+              //   child: FloatingActionButton.extended(
+              //     onPressed: () => print("test"),
+              //     label: Text("save"),
+              //   ),
+              // )
             ],
           ),
         ),

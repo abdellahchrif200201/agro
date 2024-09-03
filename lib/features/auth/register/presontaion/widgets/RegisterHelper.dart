@@ -1,7 +1,7 @@
 import 'package:devti_agro/features/auth/login/presontaion/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/register_bloc.dart';
+import '../../application/bloc/register_bloc.dart';
 
 class RegisterHelper {
   final BuildContext context;

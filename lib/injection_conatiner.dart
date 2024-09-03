@@ -1,59 +1,69 @@
 import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/router/bloc/auth_bloc.dart';
-import 'package:devti_agro/features/Checklist/application/datasource/checkList_remote_data_source.dart';
-import 'package:devti_agro/features/Checklist/application/repositories/check_list_repositories_implement.dart';
-import 'package:devti_agro/features/Checklist/domain/repositories/check_list_repositories.dart';
-import 'package:devti_agro/features/Checklist/domain/use_cases/get_all_check_list_use_case.dart';
-import 'package:devti_agro/features/Checklist/domain/use_cases/get_check_list_by_date_use_case.dart';
-import 'package:devti_agro/features/Checklist/presontation/bloc/check_list_bloc.dart';
-import 'package:devti_agro/features/Etiquetage/aplication/datasource/etiquetage_remote_data_source.dart';
-import 'package:devti_agro/features/Etiquetage/aplication/repositories/etiquetage_ropsitories_implement.dart';
-import 'package:devti_agro/features/Etiquetage/domain/repositories/etiquetage_repositories.dart';
-import 'package:devti_agro/features/Etiquetage/domain/useCase/get_all_etiquetage_use_case.dart';
-import 'package:devti_agro/features/Etiquetage/domain/useCase/get_etiquetage_use_case.dart';
-import 'package:devti_agro/features/Etiquetage/presontation/bloc/etiquetage_bloc.dart';
-import 'package:devti_agro/features/Tracbalite/application/datasource/tracabilite_remote_data_source.dart';
-import 'package:devti_agro/features/Tracbalite/application/repositories/Tracabilte_repositories_implement.dart';
-import 'package:devti_agro/features/Tracbalite/domain/repositories/tracabilite_repositories.dart';
-import 'package:devti_agro/features/Tracbalite/domain/useCase/get_all_tracabilte_use_case.dart';
-import 'package:devti_agro/features/Tracbalite/domain/useCase/get_tracabilte_by_date.dart';
-import 'package:devti_agro/features/Tracbalite/presentaion/bloc/tracabilte_bloc.dart';
+import 'package:devti_agro/features/Checklist/infrastructure/datasource/checkList_remote_data_source.dart';
+import 'package:devti_agro/features/Checklist/infrastructure/repositories/check_list_repositories.dart';
+import 'package:devti_agro/features/Checklist/application/use_cases/get_all_check_list_use_case.dart';
+import 'package:devti_agro/features/Checklist/application/use_cases/get_check_list_by_date_use_case.dart';
+import 'package:devti_agro/features/Checklist/application/bloc/check_list_bloc.dart';
+import 'package:devti_agro/features/Checklist/infrastructure/repositories/check_list_repositories_implement.dart';
+import 'package:devti_agro/features/Etiquetage/infrastructure/datasource/etiquetage_remote_data_source.dart';
+import 'package:devti_agro/features/Etiquetage/infrastructure/repositories/etiquetage_ropsitories_implement.dart';
+import 'package:devti_agro/features/Etiquetage/infrastructure/repositories/etiquetage_repositories.dart';
+import 'package:devti_agro/features/Etiquetage/aplication/useCase/get_all_etiquetage_use_case.dart';
+import 'package:devti_agro/features/Etiquetage/aplication/useCase/get_etiquetage_use_case.dart';
+import 'package:devti_agro/features/Etiquetage/aplication/bloc/etiquetage_bloc.dart';
+import 'package:devti_agro/features/Tracbalite/infrastructure/datasource/tracabilite_remote_data_source.dart';
+import 'package:devti_agro/features/Tracbalite/infrastructure/repositories/Tracabilte_repositories_implement.dart';
+import 'package:devti_agro/features/Tracbalite/infrastructure/repositories/tracabilite_repositories.dart';
+import 'package:devti_agro/features/Tracbalite/application/useCase/get_all_tracabilte_use_case.dart';
+import 'package:devti_agro/features/Tracbalite/application/useCase/get_tracabilte_by_date.dart';
+import 'package:devti_agro/features/Tracbalite/application/bloc/tracabilte_bloc.dart';
 import 'package:devti_agro/features/auth/login/infrastructure/dataSource/login_remote_data_source.dart';
 import 'package:devti_agro/features/auth/login/infrastructure/repositories/login_repo_implement.dart';
-import 'package:devti_agro/features/auth/login/domain/repositories/login_repo.dart';
+import 'package:devti_agro/features/auth/login/infrastructure/repositories/login_repo.dart';
 import 'package:devti_agro/features/auth/login/aplication/useCase/login_usse_case.dart';
 import 'package:devti_agro/features/auth/login/aplication/bloc/login_bloc.dart';
-import 'package:devti_agro/features/auth/register/application/datasource/register_remote_data_source.dart';
-import 'package:devti_agro/features/auth/register/application/repositories/register_repo_impl.dart';
-import 'package:devti_agro/features/auth/register/domain/repositories/register_repo.dart';
-import 'package:devti_agro/features/auth/register/domain/usecase/register_use_case.dart';
-import 'package:devti_agro/features/auth/register/presontaion/bloc/register_bloc.dart';
-import 'package:devti_agro/features/chambre/application/datasource/chambre_remote_data_source.dart';
+import 'package:devti_agro/features/auth/register/infrastructure/datasource/register_remote_data_source.dart';
+import 'package:devti_agro/features/auth/register/infrastructure/repositories/register_repo_impl.dart';
+import 'package:devti_agro/features/auth/register/infrastructure/repositories/register_repo.dart';
+import 'package:devti_agro/features/auth/register/application/usecase/register_use_case.dart';
+import 'package:devti_agro/features/auth/register/application/bloc/register_bloc.dart';
+import 'package:devti_agro/features/chambre/infrastructure/datasource/chambre_remote_data_source.dart';
 import 'package:devti_agro/core/network/network_info.dart';
-import 'package:devti_agro/features/chambre/application/repositories/chambre_repository_implement.dart';
-import 'package:devti_agro/features/chambre/domain/repositories/chambre_repositories.dart';
-import 'package:devti_agro/features/chambre/domain/use_cases/GetChambresByDateRangeUseCase.dart';
-import 'package:devti_agro/features/chambre/domain/use_cases/add_chambre_use_case.dart';
-import 'package:devti_agro/features/chambre/domain/use_cases/get_all_chambre.dart';
-import 'package:devti_agro/features/chambre/presontaion/bloc/create_chambre_bloc/add_chambre_bloc.dart';
-import 'package:devti_agro/features/nutrition/application/datasource/nutrition_remote_data_source.dart';
-import 'package:devti_agro/features/nutrition/application/repositories/nutrition_repositories_implement.dart';
-import 'package:devti_agro/features/nutrition/domain/repositories/nutiration_repositories.dart';
-import 'package:devti_agro/features/nutrition/domain/useCase/get_all_nutiration_use_case.dart';
-import 'package:devti_agro/features/nutrition/presentaion/bloc/nutrition_bloc.dart';
-import 'package:devti_agro/features/overview/aplication/datasource/tasks_remote_data_source.dart';
-import 'package:devti_agro/features/overview/aplication/repositories/tasks_repository_implement.dart';
-import 'package:devti_agro/features/overview/domain/repositories/tasks_repositories.dart';
-import 'package:devti_agro/features/overview/domain/use_case/get_all_tasks.dart';
-import 'package:devti_agro/features/overview/presontaion/bloc/tasks_bloc.dart';
+import 'package:devti_agro/features/chambre/infrastructure/repositories/chambre_repository_implement.dart';
+import 'package:devti_agro/features/chambre/infrastructure/repositories/chambre_repositories.dart';
+import 'package:devti_agro/features/chambre/application/use_cases/GetChambresByDateRangeUseCase.dart';
+import 'package:devti_agro/features/chambre/application/use_cases/add_chambre_use_case.dart';
+import 'package:devti_agro/features/chambre/application/use_cases/get_all_chambre.dart';
+import 'package:devti_agro/features/chambre/application/bloc/create_chambre_bloc/add_chambre_bloc.dart';
+import 'package:devti_agro/features/nutrition/infrastructure/datasource/nutrition_remote_data_source.dart';
+import 'package:devti_agro/features/nutrition/infrastructure/repositories/nutrition_repositories_implement.dart';
+import 'package:devti_agro/features/nutrition/infrastructure/repositories/nutiration_repositories.dart';
+import 'package:devti_agro/features/nutrition/application/useCase/get_all_nutiration_use_case.dart';
+import 'package:devti_agro/features/nutrition/application/bloc/nutrition_bloc.dart';
+import 'package:devti_agro/features/overview/infrastructure/datasource/tasks_remote_data_source.dart';
+import 'package:devti_agro/features/overview/infrastructure/repositories/tasks_repository_implement.dart';
+import 'package:devti_agro/features/overview/infrastructure/repositories/tasks_repositories.dart';
+import 'package:devti_agro/features/overview/aplication/use_case/get_all_tasks.dart';
+import 'package:devti_agro/features/overview/aplication/bloc/tasks_bloc.dart';
+import 'package:devti_agro/features/permission/aplication/bloc/add_role_bloc/bloc/permission_bloc.dart';
+import 'package:devti_agro/features/permission/aplication/usecase/Permission_use_case.dart';
+import 'package:devti_agro/features/permission/infrastructure/data/Permission_remote_data_source.dart';
+import 'package:devti_agro/features/permission/infrastructure/ropositories/Permission_repo_implement.dart';
+import 'package:devti_agro/features/permission/infrastructure/ropositories/permission_repo.dart';
 import 'package:devti_agro/features/role/aplication/bloc/add_role_bloc/bloc/role_bloc.dart';
 import 'package:devti_agro/features/role/aplication/usecase/role_use_case.dart';
-import 'package:devti_agro/features/role/domain/repositories/role_repo.dart';
+import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo.dart';
 import 'package:devti_agro/features/role/infrastructure/data/role_remote_data_source.dart';
 import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo_implement.dart';
+import 'package:devti_agro/features/user/aplication/bloc/add_role_bloc/bloc/user_bloc.dart';
+import 'package:devti_agro/features/user/aplication/usecase/user_use_case.dart';
+import 'package:devti_agro/features/user/infrastructure/data/user_remote_data_source.dart';
+import 'package:devti_agro/features/user/infrastructure/ropositories/user_repo.dart';
+import 'package:devti_agro/features/user/infrastructure/ropositories/user_repo_implement.dart';
 import 'package:devti_agro/features/zone/aplication/bloc/zone/bloc/zone_bloc.dart';
 import 'package:devti_agro/features/zone/aplication/usecase/zone_use_case.dart';
-import 'package:devti_agro/features/zone/domain/repositories/zone_repo.dart';
+import 'package:devti_agro/features/zone/infrastructure/ropositories/zone_repo.dart';
 import 'package:devti_agro/features/zone/infrastructure/data/zone_remote_data_source.dart';
 import 'package:devti_agro/features/zone/infrastructure/ropositories/zone_repo_implement.dart';
 import 'package:get_it/get_it.dart';
@@ -61,20 +71,16 @@ import 'Package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'features/chambre/presontaion/bloc/get_chambres_bloc/chambres_bloc.dart';
+import 'features/chambre/application/bloc/get_chambres_bloc/chambres_bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
 
-  final prefs = await SharedPreferences.getInstance();
-  final isDark = prefs.getBool('isDark') ?? false;
+  
   // Bloc _________________________________________________________________________________
 
-  sl.registerFactory(() => ChambresBloc(
-        getAllChambres: sl(),
-        getChambresByDateRange: sl(),
-      ));
+  sl.registerFactory(() => ChambresBloc(getAllChambres: sl(),getChambresByDateRange: sl(),));
   sl.registerFactory(() => TasksBloc(getAllTasks: sl()));
   sl.registerFactory(() => EtiquetageBloc(getAllEtiquetageUseCase: sl(), getEtiquetageByDateUseCase: sl()));
   sl.registerFactory(() => TracabilteBloc(getAllTracabilteUseCase: sl(), getTracabiliteByDateUseCase: sl()));
@@ -85,9 +91,11 @@ Future<void> init() async {
   sl.registerFactory(() => AddChambreBloc(addChambreUseCase: sl()));
   sl.registerFactory(() => ZoneBloc(zoneUseCase: sl()));
   sl.registerFactory(() => RoleBloc(roleUseCase: sl()));
+  sl.registerFactory(() => UserBloc(userUseCase: sl()));
+  sl.registerFactory(() => PermissionBloc(permissionUseCase: sl()));
 
   // Add the ThemeBloc registration
-  sl.registerFactory(() => ThemeBloc(isDark));
+  sl.registerFactory(() => ThemeBloc());
   sl.registerFactory(() => AuthBloc());
 
   // Use Cases ____________________________________________________________________________
@@ -132,6 +140,14 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => RoleUseCase(roleRepo: sl()));
 
+    /* Permission */
+
+  sl.registerLazySingleton(() => PermissionUseCase(permissionRepo: sl()));
+
+  /* ROLE */
+
+  sl.registerLazySingleton(() => UserUseCase(userRepo: sl()));
+
   /*____________________________________ Repository ____________________________________*/
 
   /* chambre */
@@ -143,6 +159,8 @@ Future<void> init() async {
   sl.registerLazySingleton<LoginRepo>(() => LoginRepoImplement(networkInfo: sl(), remoteDataSource: sl()));
   sl.registerLazySingleton<RegisterRepo>(() => RegisterRepoImpl(networkInfo: sl(), registerRemoteDataSource: sl()));
   sl.registerLazySingleton<ZoneRepo>(() => ZoneRepoImplement(networkInfo: sl(), zoneRemoteDataSource: sl()));
+  sl.registerLazySingleton<UserRepo>(() => UserRepoImplement(networkInfo: sl(), userRemoteDataSource: sl()));
+  sl.registerLazySingleton<PermissionRepo>(() => PermissionRepoImplement(networkInfo: sl(), permissionRemoteDataSource: sl()));
 
 /* ROLE */
 
@@ -169,6 +187,8 @@ Future<void> init() async {
   sl.registerLazySingleton<RegisterRemoteDataSource>(() => RegisterRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<ZoneRemoteDataSource>(() => ZoneRemoteDataSourceImplement(client: sl()));
   sl.registerLazySingleton<RoleRemoteDataSource>(() => RoleRemoteDataSourceImplement(client: sl()));
+  sl.registerLazySingleton<UserRemoteDataSource>(() => UserRemoteDataSourceImplement(client: sl()));
+  sl.registerLazySingleton<PermissionRemoteDataSource>(() => PermissionRemoteDataSourceImplement(client: sl()));
 
   //! Core ____________________________________________________________________________________________________________
 

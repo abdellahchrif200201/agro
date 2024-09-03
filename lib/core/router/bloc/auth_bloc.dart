@@ -10,7 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<CheckAuthEvent>((event, emit) async {
       // Simulate a delay for checking the token
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
 
       // Check if the token is present
       final bool isTokenPresent = await _isTokenPresent();

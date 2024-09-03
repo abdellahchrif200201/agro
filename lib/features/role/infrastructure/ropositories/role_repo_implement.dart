@@ -6,7 +6,7 @@ import 'package:devti_agro/core/error/exeptions.dart';
 import 'package:devti_agro/core/error/failures.dart';
 import 'package:devti_agro/core/network/network_info.dart';
 import 'package:devti_agro/features/role/domain/entities/role.dart';
-import 'package:devti_agro/features/role/domain/repositories/role_repo.dart';
+import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo.dart';
 import 'package:devti_agro/features/role/infrastructure/data/role_remote_data_source.dart';
 
 

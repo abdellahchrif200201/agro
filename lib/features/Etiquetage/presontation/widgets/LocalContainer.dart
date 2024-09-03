@@ -15,7 +15,7 @@ class LocalContainer extends StatelessWidget {
         horizontal: paddingHor ?? 0.0, // Use default padding if paddingHor is null
       ),
       decoration: BoxDecoration(
-        border: Border.all(),
+        border: Border.all(color: Colors.green),
         borderRadius: BorderRadius.circular(15),
       ),
       child: child,
