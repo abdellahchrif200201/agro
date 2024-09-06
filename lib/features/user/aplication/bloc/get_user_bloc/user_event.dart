@@ -8,10 +8,9 @@ sealed class UserEvent extends Equatable {
 }
 
 class GetAllUserEvent extends UserEvent {
-  
-
- 
 
   @override
   List<Object> get props => [];
 }
+
+class RefreshUserEvent extends UserEvent {}

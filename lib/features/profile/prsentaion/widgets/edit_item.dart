@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class EditItem extends StatelessWidget {
   final Widget? widget;
   final String title;
+  final TextEditingController? controller;
   const EditItem({
     super.key,
     this.widget,
+     this.controller,
     required this.title,
   });
 
@@ -29,7 +31,8 @@ class EditItem extends StatelessWidget {
         Expanded(
           flex: 5,
           child: widget ??
-              const TextField(
+               TextField(
+                 controller: controller,
                 cursorColor: Colors.amber,
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(

@@ -1,10 +1,14 @@
 import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/router/bloc/auth_bloc.dart';
+import 'package:devti_agro/features/Checklist/application/bloc/add_delete_update_tache/add_delete_update_tache_bloc.dart';
+import 'package:devti_agro/features/Checklist/application/use_cases/add_tache_use_case.dart';
+import 'package:devti_agro/features/Checklist/application/use_cases/delete_tache_use_case.dart';
+import 'package:devti_agro/features/Checklist/application/use_cases/update_check_list_use_case.dart';
 import 'package:devti_agro/features/Checklist/infrastructure/datasource/checkList_remote_data_source.dart';
 import 'package:devti_agro/features/Checklist/infrastructure/repositories/check_list_repositories.dart';
 import 'package:devti_agro/features/Checklist/application/use_cases/get_all_check_list_use_case.dart';
 import 'package:devti_agro/features/Checklist/application/use_cases/get_check_list_by_date_use_case.dart';
-import 'package:devti_agro/features/Checklist/application/bloc/check_list_bloc.dart';
+import 'package:devti_agro/features/Checklist/application/bloc/get_all_check_list/check_list_bloc.dart';
 import 'package:devti_agro/features/Checklist/infrastructure/repositories/check_list_repositories_implement.dart';
 import 'package:devti_agro/features/Etiquetage/infrastructure/datasource/etiquetage_remote_data_source.dart';
 import 'package:devti_agro/features/Etiquetage/infrastructure/repositories/etiquetage_ropsitories_implement.dart';
@@ -12,6 +16,11 @@ import 'package:devti_agro/features/Etiquetage/infrastructure/repositories/etiqu
 import 'package:devti_agro/features/Etiquetage/aplication/useCase/get_all_etiquetage_use_case.dart';
 import 'package:devti_agro/features/Etiquetage/aplication/useCase/get_etiquetage_use_case.dart';
 import 'package:devti_agro/features/Etiquetage/aplication/bloc/etiquetage_bloc.dart';
+import 'package:devti_agro/features/Fournisseur/aplication/bloc/add_role_bloc/bloc/Fournisseur_bloc.dart';
+import 'package:devti_agro/features/Fournisseur/aplication/usecase/Fournisseur_use_case.dart';
+import 'package:devti_agro/features/Fournisseur/infrastructure/data/fournisseur_remote_data_source.dart';
+import 'package:devti_agro/features/Fournisseur/infrastructure/ropositories/fournisseur_repo.dart';
+import 'package:devti_agro/features/Fournisseur/infrastructure/ropositories/fournisseur_repo_implement.dart';
 import 'package:devti_agro/features/Tracbalite/infrastructure/datasource/tracabilite_remote_data_source.dart';
 import 'package:devti_agro/features/Tracbalite/infrastructure/repositories/Tracabilte_repositories_implement.dart';
 import 'package:devti_agro/features/Tracbalite/infrastructure/repositories/tracabilite_repositories.dart';
@@ -28,6 +37,9 @@ import 'package:devti_agro/features/auth/register/infrastructure/repositories/re
 import 'package:devti_agro/features/auth/register/infrastructure/repositories/register_repo.dart';
 import 'package:devti_agro/features/auth/register/application/usecase/register_use_case.dart';
 import 'package:devti_agro/features/auth/register/application/bloc/register_bloc.dart';
+import 'package:devti_agro/features/chambre/application/bloc/delete_update_chambre/delete_update_chambre_bloc.dart';
+import 'package:devti_agro/features/chambre/application/use_cases/delete_chambre_use_case.dart';
+import 'package:devti_agro/features/chambre/application/use_cases/update_chambre_use_case.dart';
 import 'package:devti_agro/features/chambre/infrastructure/datasource/chambre_remote_data_source.dart';
 import 'package:devti_agro/core/network/network_info.dart';
 import 'package:devti_agro/features/chambre/infrastructure/repositories/chambre_repository_implement.dart';
@@ -56,7 +68,11 @@ import 'package:devti_agro/features/role/aplication/usecase/role_use_case.dart';
 import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo.dart';
 import 'package:devti_agro/features/role/infrastructure/data/role_remote_data_source.dart';
 import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo_implement.dart';
-import 'package:devti_agro/features/user/aplication/bloc/add_role_bloc/bloc/user_bloc.dart';
+import 'package:devti_agro/features/user/aplication/bloc/delete_add_update_user/delete_add_update_user_bloc.dart';
+import 'package:devti_agro/features/user/aplication/bloc/get_user_bloc/user_bloc.dart';
+import 'package:devti_agro/features/user/aplication/usecase/add_user_use_case.dart';
+import 'package:devti_agro/features/user/aplication/usecase/delete_user_use_case.dart';
+import 'package:devti_agro/features/user/aplication/usecase/update_user_use_case.dart';
 import 'package:devti_agro/features/user/aplication/usecase/user_use_case.dart';
 import 'package:devti_agro/features/user/infrastructure/data/user_remote_data_source.dart';
 import 'package:devti_agro/features/user/infrastructure/ropositories/user_repo.dart';
@@ -76,23 +92,34 @@ import 'features/chambre/application/bloc/get_chambres_bloc/chambres_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  //================================= Bloc ==================================
+
 
   
-  // Bloc _________________________________________________________________________________
-
+            /* chambre blocs */
   sl.registerFactory(() => ChambresBloc(getAllChambres: sl(),getChambresByDateRange: sl(),));
+  sl.registerFactory(() => AddChambreBloc(addChambreUseCase: sl()));
+  sl.registerFactory(() => AddDeleteUpdateChambreBloc(deleteChambreUseCase: sl() , updateChambreUseCase: sl()));
+
   sl.registerFactory(() => TasksBloc(getAllTasks: sl()));
+  sl.registerFactory(() => AddDeleteUpdateTacheBloc(addTache: sl(), deleteTache: sl() ,updateTache: sl()));
+
   sl.registerFactory(() => EtiquetageBloc(getAllEtiquetageUseCase: sl(), getEtiquetageByDateUseCase: sl()));
   sl.registerFactory(() => TracabilteBloc(getAllTracabilteUseCase: sl(), getTracabiliteByDateUseCase: sl()));
   sl.registerFactory(() => NutritionBloc(getAllNutirationUseCase: sl()));
   sl.registerFactory(() => CheckListBloc(getAllCheckListUseCase: sl(), getCheckListByDateUseCase: sl()));
   sl.registerFactory(() => LoginBloc(loginUseCase: sl()));
   sl.registerFactory(() => RegisterBloc(registerUseCase: sl()));
-  sl.registerFactory(() => AddChambreBloc(addChambreUseCase: sl()));
+
   sl.registerFactory(() => ZoneBloc(zoneUseCase: sl()));
   sl.registerFactory(() => RoleBloc(roleUseCase: sl()));
+
+  /*  user  */
   sl.registerFactory(() => UserBloc(userUseCase: sl()));
+  sl.registerFactory(() => AddDeleteUpdateUserBloc(deleteUser: sl(), addUser: sl() ,updateUser: sl()));
+
   sl.registerFactory(() => PermissionBloc(permissionUseCase: sl()));
+  sl.registerFactory(() => FournisseurBloc(fournisseurUseCase: sl()));
 
   // Add the ThemeBloc registration
   sl.registerFactory(() => ThemeBloc());
@@ -105,6 +132,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetAllChambresUseCase(sl()));
   sl.registerLazySingleton(() => GetChambresByDateRangeUseCase(sl()));
   sl.registerLazySingleton(() => AddChambreUseCase(chambresRepository: sl()));
+  sl.registerLazySingleton(() => DeleteChambreUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UpdateChambreUseCase(repository: sl()));
 
   /* tasks */
 
@@ -127,6 +156,9 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetAllCheckListUseCase(checkListRepositories: sl()));
   sl.registerLazySingleton(() => GetCheckListByDateUseCase(repositories: sl()));
+  sl.registerLazySingleton(() => AddTacheUseCase(repository: sl()));
+  sl.registerLazySingleton(() => DeleteTacheUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UpdateTacheUsecase(repository: sl()));
   /* AUTH */
 
   sl.registerLazySingleton(() => LoginUseCase(loginRepo: sl()));
@@ -136,17 +168,24 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetZonesByEntrepriseUseCase(zoneRepo: sl()));
 
+  /* Fournisseur */
+
+  sl.registerLazySingleton(() => FournisseurUseCase(fournisseurRepo: sl()));
+
   /* ROLE */
 
   sl.registerLazySingleton(() => RoleUseCase(roleRepo: sl()));
 
-    /* Permission */
+  /* Permission */
 
   sl.registerLazySingleton(() => PermissionUseCase(permissionRepo: sl()));
 
-  /* ROLE */
+  /* User */
 
   sl.registerLazySingleton(() => UserUseCase(userRepo: sl()));
+  sl.registerLazySingleton(() => DeleteUserUseCase(userRepo: sl()));
+  sl.registerLazySingleton(() => AddUserUseCase(userRepo: sl()));
+  sl.registerLazySingleton(() => UpdateUserUsecase(userRepo: sl()));
 
   /*____________________________________ Repository ____________________________________*/
 
@@ -161,6 +200,7 @@ Future<void> init() async {
   sl.registerLazySingleton<ZoneRepo>(() => ZoneRepoImplement(networkInfo: sl(), zoneRemoteDataSource: sl()));
   sl.registerLazySingleton<UserRepo>(() => UserRepoImplement(networkInfo: sl(), userRemoteDataSource: sl()));
   sl.registerLazySingleton<PermissionRepo>(() => PermissionRepoImplement(networkInfo: sl(), permissionRemoteDataSource: sl()));
+  sl.registerLazySingleton<FournisseurRepo>(() => FournisseurRepoImplement(networkInfo: sl(), fournisseurRemoteDataSource: sl()));
 
 /* ROLE */
 
@@ -189,6 +229,7 @@ Future<void> init() async {
   sl.registerLazySingleton<RoleRemoteDataSource>(() => RoleRemoteDataSourceImplement(client: sl()));
   sl.registerLazySingleton<UserRemoteDataSource>(() => UserRemoteDataSourceImplement(client: sl()));
   sl.registerLazySingleton<PermissionRemoteDataSource>(() => PermissionRemoteDataSourceImplement(client: sl()));
+  sl.registerLazySingleton<FournisseurRemoteDataSource>(() => FournisseurRemoteDataSourceImplement(client: sl()));
 
   //! Core ____________________________________________________________________________________________________________
 

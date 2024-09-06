@@ -9,7 +9,13 @@ abstract class ChambresEvent extends Equatable {
 
 // get all chambres
 
-class GetAllChambresEvent extends ChambresEvent {}
+class GetAllChambresEvent extends ChambresEvent {
+  final int page;
+  GetAllChambresEvent({required this.page});
+
+  @override
+  List<Object?> get props => [];
+}
 
 // refresh chambres
 

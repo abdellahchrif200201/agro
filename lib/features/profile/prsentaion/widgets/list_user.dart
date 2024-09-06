@@ -28,7 +28,7 @@ class ListUser extends StatelessWidget {
             user.name,
             style: TextStyle(color: Colors.black),
           ),
-          subtitle: const Text('johndoe@gmail.com'),
+          subtitle: Text(user.email ?? "null"),
           trailing: GestureDetector(
               onTap: () {
                 Navigator.push(

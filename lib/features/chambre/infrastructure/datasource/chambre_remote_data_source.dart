@@ -1,33 +1,40 @@
-import 'dart:convert';
-import 'package:dartz/dartz.dart';
-import 'package:devti_agro/core/error/exeptions.dart';
-import 'package:devti_agro/features/chambre/application/models/chambre_model.dart';
-import 'package:http/http.dart' as http;
+import "dart:async";
+import "dart:convert";
+import "package:dartz/dartz.dart";
+import "package:devti_agro/core/error/exeptions.dart";
+import "package:devti_agro/features/chambre/application/models/chambre_model.dart";
+import "package:http/http.dart" as http;
 
-import '../../../../core/api/api_route.dart';
+import "../../../../core/api/api_route.dart";
 
 abstract class ChambreRemoteDataSource {
-  Future<List<ChambreModel>> getAllChambre(int? page);
+  Future<List<ChambreModel>> getAllChambre(int page);
   Future<Unit> addChambre(ChambreModel chambreModel);
+  Future<Unit> updateChambre(ChambreModel chambreModel);
+  Future<Unit> deleteChambre(int idChambre);
 }
 
 class ChambreRemoteDataSourceImplement implements ChambreRemoteDataSource {
   final http.Client client;
   ChambreRemoteDataSourceImplement({required this.client});
   @override
-  Future<List<ChambreModel>> getAllChambre(int? page) async {
+  Future<List<ChambreModel>> getAllChambre(int page) async {
     final response = await client.get(
-      Uri.parse("$BASE_URL/MOBILE/Chambre/1?page=2"),
+      Uri.parse("$BASE_URL/MOBILE/Chambre/1?page=$page"),
       headers: {
         "Content-type": "application/json",
       },
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> decodedJson = json.decode(response.body) as Map<String, dynamic>;
-      final List<dynamic> data = decodedJson['data'];
+      final Map<String, dynamic> decodedJson = json.decode(response.body);
 
-      final List<ChambreModel> chambresModel = data.map<ChambreModel>((jsonChambreModel) => ChambreModel.fromJson(jsonChambreModel)).toList();
+      final List<dynamic> data = decodedJson['data'];
+      final List<ChambreModel> chambresModel = data.map<ChambreModel>((jsonChambreModel) {
+        return ChambreModel.fromJson({'data': jsonChambreModel, 'meta': decodedJson['meta']});
+      }).toList();
+
+      print(decodedJson['meta']);
 
       return chambresModel;
     } else {
@@ -38,12 +45,12 @@ class ChambreRemoteDataSourceImplement implements ChambreRemoteDataSource {
   @override
   Future<Unit> addChambre(ChambreModel chambreModel) async {
     final body =
-        jsonEncode({"Name": chambreModel.name, "EntrepriseICE": chambreModel.entrepriseICE, 'ZoneId': chambreModel.zoneId, 'Surface': chambreModel.surface, 'Temperature': chambreModel.temperature});
+        jsonEncode({"Name": chambreModel.name, "EntrepriseICE": chambreModel.entrepriseICE, "ZoneId": chambreModel.zoneId, "Surface": chambreModel.surface, "Temperature": chambreModel.temperature});
 
     final response = await client.post(
-      Uri.parse('$BASE_URL/MOBILE/Chambre'),
+      Uri.parse("$BASE_URL/MOBILE/Chambre"),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: body,
     );
@@ -61,12 +68,52 @@ class ChambreRemoteDataSourceImplement implements ChambreRemoteDataSource {
         return Future.value(unit);
       } else {
         // Handle unexpected response codes or messages
-        throw ServerException(message: responseBody['message  '] ?? 'Unexpected error');
+        throw ServerException(message: responseBody["message  "] ?? "Unexpected error");
       }
     } else {
       print("no create chambres");
-      final errorMessage = responseBody['error'] ?? 'Server error';
+      final errorMessage = responseBody["error"] ?? "Server error";
       throw ServerException(message: errorMessage);
+    }
+  }
+
+  @override
+  Future<Unit> deleteChambre(int idChambre) async {
+    final response = await client.delete(
+      Uri.parse("$BASE_URL/WEB/Chambre/${idChambre.toString()}"),
+      headers: {"Content-Type": "application/json"},
+    );
+
+    if (response.statusCode == 200) {
+      return Future.value(unit);
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<Unit> updateChambre(ChambreModel chambreModel) async {
+    final chambreId = chambreModel.id.toString();
+    final chambreZONE = chambreModel.zoneId.toString();
+
+    print("chambre id $chambreId");
+    print("zone id $chambreZONE ");
+
+    final body = jsonEncode({"Name": chambreModel.name, "ZoneId": chambreModel.zoneId, "Surface": chambreModel.surface, "Temperature": chambreModel.temperature});
+
+    final response = await client.put(
+      Uri.parse("$BASE_URL/WEB/Chambre/$chambreId"),
+      headers: {"Content-Type": "application/json"},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return Future.value(unit);
+    } else {
+      print(response.body);
+
+      throw ServerException();
     }
   }
 }

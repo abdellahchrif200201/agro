@@ -9,9 +9,21 @@ class Chambre {
   final double temperature;
   final String? createdAt;
 
+  final int? pageFrom;
+  final int? pageCurrent;
+  final int? lastPage;
 
-  
-  Chambre({ this.id, required this.name,  this.zoneName,  this.entrepriseName, required this.surface, required this.temperature,  this.createdAt , this.entrepriseICE , this.zoneId});
+  Chambre(
+      {this.id,
+      required this.name,
+      this.zoneName,
+      this.entrepriseName,
+      required this.surface,
+      required this.temperature,
+      this.createdAt,
+      this.entrepriseICE,
+      this.pageCurrent,
+      this.pageFrom,
+      this.lastPage,
+      this.zoneId});
 }
-
-

@@ -1,21 +1,28 @@
 class CheckList {
-  final int id;
+  final int? id;
   final String? tasksName;
-  final String? zone;
   final String? date;
   final String? category;
   final String? status;
-  final String? message;
+  final String? type;
   final String? description;
+  final int? entrepriseId;
+  final int? userId;
+  final String? userName;
+  final String? message;
 
   CheckList({
-    required this.id,
-     this.tasksName = "tasksName",
-    this.zone = 'zone', // Provide a default value if zone can be null
-    this.date = '2022-06-52 00:00:00', // Provide a default value if date can be null
-    this.category = 'category', // Provide a default value if category can be null
-    this.status = 'status', // Provide a default value if status can be null
-    this.message = 'message', // Provide a default value if message can be null
-    this.description = 'description', // Provide a default value if description can be null
+    this.id,
+    this.tasksName ,
+    this.date , // Provide a default value if date can be null
+    this.category , // Provide a default value if category can be null
+    this.status , // Provide a default value if status can be null
+    this.description ,
+    this.entrepriseId,
+    this.type,
+    this.userId,
+    this.userName,
+    this.message
+     // Provide a default value if description can be null
   });
 }

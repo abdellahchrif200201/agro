@@ -2,29 +2,38 @@ import 'package:devti_agro/features/chambre/domain/entities/Chambre.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
 class ChambreModel extends Chambre {
-  ChambreModel({
-    super.id,
-    required super.name,
-    super.zoneName,
-    super.entrepriseName,
-    required super.surface,
-    required super.temperature,
-    super.createdAt,
-    super.entrepriseICE,
-    super.zoneId,
-  });
+  ChambreModel(
+      {super.id,
+      required super.name,
+      super.zoneName,
+      super.entrepriseName,
+      required super.surface,
+      required super.temperature,
+      super.createdAt,
+      super.entrepriseICE,
+      super.zoneId,
+      super.pageCurrent,
+      super.pageFrom,
+      super.lastPage});
 
   factory ChambreModel.fromJson(Map<String, dynamic> json) {
+    // Extract data and meta fields from the JSON
+    final data = json['data'];
+    final meta = json['meta'];
+
     return ChambreModel(
-      id: json['id'] as int?,
-      name: json['Name'] as String,
-      zoneName: json['Zone']?['name'] as String?,
-      entrepriseName: json['Entreprise']?['name'] as String?,
-      surface: (json['Surface'] as num).toDouble(),
-      temperature: (json['Temperature'] as num).toDouble(),
-      createdAt: json['created_at'] as String?,
-      entrepriseICE:  json['Entreprise']['id'] as int,
-      zoneId:  json['Zone']?['id'] as int?,
+      id: data['id'] as int?,
+      name: data['Name'] as String,
+      zoneName: data['Zone']?['name'] as String?,
+      entrepriseName: data['Entreprise']?['name'] as String?,
+      surface: (data['Surface'] as num).toDouble(),
+      temperature: (data['Temperature'] as num).toDouble(),
+      createdAt: data['created_at'] as String?,
+      entrepriseICE: data['Entreprise']['id'] as int,
+      zoneId: data['Zone']?['id'] as int?,
+      pageCurrent: meta['current_page'] as int?,
+      pageFrom: meta['from'] as int?,
+      lastPage: meta['last_page'] as int?,
     );
   }
 

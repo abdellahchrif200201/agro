@@ -22,12 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final bool _obscureText = false;
 
   bool isLoading = false;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
     emailController.text = widget.email ?? "";
     passwordController.text = widget.password ?? "";
 

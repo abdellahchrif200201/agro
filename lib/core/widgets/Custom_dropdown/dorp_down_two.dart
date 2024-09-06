@@ -27,23 +27,20 @@ class _DropdownTwoState extends State<DropdownTwo> {
   @override
   void initState() {
     super.initState();
-    // Ensure unique dropdown items and set the initial value if not empty
     uniqueItems = widget.dropDownItems.toSet().toList();
     if (uniqueItems.isNotEmpty) {
-      selectedValue = uniqueItems[0];
+      selectedValue = null; // Ensure initial value is null
     }
   }
 
   @override
   void didUpdateWidget(covariant DropdownTwo oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Update selected value if dropDownItems have changed
     if (widget.dropDownItems != oldWidget.dropDownItems) {
       setState(() {
         uniqueItems = widget.dropDownItems.toSet().toList();
-        // Set selectedValue to first item if not present in the new list
         if (selectedValue == null || !uniqueItems.contains(selectedValue)) {
-          selectedValue = uniqueItems.isNotEmpty ? uniqueItems[0] : null;
+          selectedValue = null;
         }
       });
     }
@@ -51,11 +48,6 @@ class _DropdownTwoState extends State<DropdownTwo> {
 
   @override
   Widget build(BuildContext context) {
-    // Ensure the selectedValue is in the dropdown items
-    if (selectedValue != null && !uniqueItems.contains(selectedValue)) {
-      selectedValue = null; // Reset selectedValue if not valid
-    }
-
     return Row(
       children: [
         if (widget.label != null)
@@ -67,11 +59,11 @@ class _DropdownTwoState extends State<DropdownTwo> {
           child: DropdownButtonFormField2<String>(
             isExpanded: true,
             decoration: const InputDecoration(
-              enabledBorder: InputBorder.none, // Remove border
-              focusedBorder: InputBorder.none, // Remove focus border
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
             ),
             hint: Text(
-              widget.hint,
+              selectedValue == null ? widget.hint : selectedValue!,
               style: const TextStyle(fontSize: 14),
             ),
             items: uniqueItems.map((item) {
@@ -106,10 +98,7 @@ class _DropdownTwoState extends State<DropdownTwo> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
               ),
-              maxHeight: 200, // Limits the dropdown height to enable scrolling
-              // scrollbarRadius: const Radius.circular(40),
-              // scrollbarThickness: 6,
-              // scrollbarAlwaysShow: true,
+              maxHeight: 200,
             ),
             menuItemStyleData: const MenuItemStyleData(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -144,7 +133,6 @@ class _DropdownTwoState extends State<DropdownTwo> {
                 return (item.value.toString().toLowerCase().contains(searchValue.toLowerCase()));
               },
             ),
-            // This to clear the search value when you close the menu
             onMenuStateChange: (isOpen) {
               if (!isOpen) {
                 searchController.clear();

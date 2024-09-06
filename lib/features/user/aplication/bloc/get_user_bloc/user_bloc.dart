@@ -17,6 +17,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   UserBloc({required this.userUseCase}) : super(UserInitial()) {
     on<GetAllUserEvent>(_onGetAllUser);
+    on<RefreshUserEvent>(_onRefreshUsers);
   }
 
   Future<void> _onGetAllUser(
@@ -26,6 +27,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     emit(LoadingUserState());
 
     final failureOrUser = await userUseCase.call();
+    emit(_mapFailureOrUserToState(failureOrUser));
+  }
+
+
+  Future<void> _onRefreshUsers(
+    RefreshUserEvent event,
+    Emitter<UserState> emit,
+  ) async {
+    emit(LoadingUserState());
+
+    final failureOrUser = await userUseCase();
     emit(_mapFailureOrUserToState(failureOrUser));
   }
 

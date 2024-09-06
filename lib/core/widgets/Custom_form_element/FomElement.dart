@@ -8,7 +8,7 @@ class FormElement extends StatelessWidget {
   final Widget? child; // Add this parameter to allow custom children
   final TextEditingController? controller;
   final TextStyle? textStyle;
-
+  final TextInputType? keyboardType;
   const FormElement(
       {super.key,
       required this.hint,
@@ -16,7 +16,9 @@ class FormElement extends StatelessWidget {
       required this.label,
       this.maxLines = 1,
       this.child, // Initialize the new parameter
-      this.textStyle});
+      this.textStyle,
+      this.keyboardType
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class FormElement extends StatelessWidget {
                 TextField(
                   controller: controller,
                   maxLines: maxLines,
+                  keyboardType: keyboardType,
                   decoration: InputDecoration(
                     hintText: hint,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

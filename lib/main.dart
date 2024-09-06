@@ -4,18 +4,22 @@ import 'package:devti_agro/core/config/theme/bloc/theme_event.dart';
 import 'package:devti_agro/core/config/theme/bloc/theme_state.dart';
 // import 'package:devti_agro/core/config/theme/theme.dart';
 import 'package:devti_agro/core/splashScreen/splash_screen.dart';
-import 'package:devti_agro/features/Checklist/application/bloc/check_list_bloc.dart';
+import 'package:devti_agro/features/Checklist/application/bloc/add_delete_update_tache/add_delete_update_tache_bloc.dart';
+import 'package:devti_agro/features/Checklist/application/bloc/get_all_check_list/check_list_bloc.dart';
 import 'package:devti_agro/features/Etiquetage/aplication/bloc/etiquetage_bloc.dart';
+import 'package:devti_agro/features/Fournisseur/aplication/bloc/add_role_bloc/bloc/Fournisseur_bloc.dart';
 import 'package:devti_agro/features/Tracbalite/application/bloc/tracabilte_bloc.dart';
 import 'package:devti_agro/features/auth/login/aplication/bloc/login_bloc.dart';
 import 'package:devti_agro/features/auth/register/application/bloc/register_bloc.dart';
 import 'package:devti_agro/features/chambre/application/bloc/create_chambre_bloc/add_chambre_bloc.dart';
+import 'package:devti_agro/features/chambre/application/bloc/delete_update_chambre/delete_update_chambre_bloc.dart';
 import 'package:devti_agro/features/dashboard/HomePage.dart';
 import 'package:devti_agro/features/nutrition/application/bloc/nutrition_bloc.dart';
 import 'package:devti_agro/features/overview/aplication/bloc/tasks_bloc.dart';
 import 'package:devti_agro/features/permission/aplication/bloc/add_role_bloc/bloc/permission_bloc.dart';
 import 'package:devti_agro/features/role/aplication/bloc/add_role_bloc/bloc/role_bloc.dart';
-import 'package:devti_agro/features/user/aplication/bloc/add_role_bloc/bloc/user_bloc.dart';
+import 'package:devti_agro/features/user/aplication/bloc/delete_add_update_user/delete_add_update_user_bloc.dart';
+import 'package:devti_agro/features/user/aplication/bloc/get_user_bloc/user_bloc.dart';
 import 'package:devti_agro/features/zone/aplication/bloc/zone/bloc/zone_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,7 +66,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => di.sl<ChambresBloc>()..add(GetAllChambresEvent())),
+        BlocProvider(create: (_) => di.sl<ChambresBloc>()..add(GetAllChambresEvent(page: 1))),
         BlocProvider(create: (_) => di.sl<TasksBloc>()..add(GetAllTasksEvent())),
         BlocProvider(create: (_) => di.sl<EtiquetageBloc>()..add(GetAllEtiquetageEvent())),
         BlocProvider(create: (_) => di.sl<TracabilteBloc>()..add(GetAllTracabiliteEvent())),
@@ -76,6 +80,10 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => di.sl<LoginBloc>()),
         BlocProvider(create: (_) => di.sl<RegisterBloc>()),
         BlocProvider(create: (_) => di.sl<AddChambreBloc>()),
+        BlocProvider(create: (_) => di.sl<AddDeleteUpdateUserBloc>()),
+        BlocProvider(create: (_) => di.sl<AddDeleteUpdateTacheBloc>()),
+        BlocProvider(create: (_) => di.sl<AddDeleteUpdateChambreBloc>()),
+        BlocProvider(create: (_) => di.sl<FournisseurBloc>()..add(GetAllFournisseurEvent())),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812), // Adjust this to your design's dimensions

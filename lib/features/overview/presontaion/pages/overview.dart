@@ -140,8 +140,8 @@ class _OverViewTabViewState extends State<OverViewTabView> {
                 )
               : Column(
                   children: [
-                    TasksCard(task: Tasks(id: 1, taskName: "taskName", status: "status", message: "message", description: "description")),
-                    TasksCard(task: Tasks(id: 1, taskName: "taskName", status: "status", message: "message", description: "description")),
+                    TasksCard(task: Tasks(id: 1, taskName: "taskName", status: "status",description: "description")),
+                    TasksCard(task: Tasks(id: 1, taskName: "taskName", status: "status",description: "description")),
                   ],
                 )
         ],

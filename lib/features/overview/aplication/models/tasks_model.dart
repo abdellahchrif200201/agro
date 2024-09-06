@@ -5,7 +5,6 @@ class TasksModel extends Tasks {
     required super.id,
     required super.taskName,
     required super.status,
-    required super.message,
     required super.description,
   });
 
@@ -14,7 +13,6 @@ class TasksModel extends Tasks {
       id: json['id'] as int,
       taskName: json['TaskName'] as String,
       status: json['status'] as String,
-      message: json['Message'] as String,
       description: json['Description'] as String,
     );
   }
@@ -24,7 +22,6 @@ class TasksModel extends Tasks {
       'id': id,
       'TaskName': taskName,
       'status': status,
-      'Message': message,
       'Description': description,
     };
   }

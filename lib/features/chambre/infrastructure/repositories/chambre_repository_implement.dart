@@ -19,7 +19,7 @@ class ChambreRepositoryImplement implements ChambresRepository {
   });
 
   @override
-  Future<Either<Failure, List<Chambre>>> getAllChambres(int? page) async {
+  Future<Either<Failure, List<Chambre>>> getAllChambres(int page) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteChambresResponse = await chambreRemoteDataSource.getAllChambre(page);
@@ -39,7 +39,7 @@ class ChambreRepositoryImplement implements ChambresRepository {
   Future<Either<Failure, List<Chambre>>> getChambresByDateRange(DateTimeRange dateRange) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteChambresResponse = await chambreRemoteDataSource.getAllChambre(null);
+        final remoteChambresResponse = await chambreRemoteDataSource.getAllChambre(1);
         final filteredChambres = remoteChambresResponse.where((chambre) {
           final createdAt = chambre.createdAtDateTime;
           return createdAt!.isAfter(dateRange.start) && createdAt.isBefore(dateRange.end);
@@ -55,15 +55,13 @@ class ChambreRepositoryImplement implements ChambresRepository {
       return left(OfflineFailure());
     }
   }
-  
- @override
+
+  @override
   Future<Either<Failure, List<Chambre>>> getChambresByName(String name) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteChambresResponse = await chambreRemoteDataSource.getAllChambre(null);
-        final List<Chambre> chambres = remoteChambresResponse
-            .map((json) => ChambreModel.fromJson(json as Map<String, dynamic>))
-            .toList();
+        final remoteChambresResponse = await chambreRemoteDataSource.getAllChambre(1);
+        final List<Chambre> chambres = remoteChambresResponse.map((json) => ChambreModel.fromJson(json as Map<String, dynamic>)).toList();
         final filteredChambres = chambres.where((chambre) {
           return chambre.name.toLowerCase().contains(name.toLowerCase());
         }).toList();
@@ -78,11 +76,11 @@ class ChambreRepositoryImplement implements ChambresRepository {
       return left(OfflineFailure());
     }
   }
-  
+
   @override
   Future<Either<Failure, Unit>> addChambre(Chambre chambre) async {
     if (await networkInfo.isConnected) {
-      final chambreModel = ChambreModel(name: chambre.name ,surface: chambre.surface ,temperature: chambre.temperature ,zoneId: chambre.zoneId , entrepriseICE: chambre.entrepriseICE );
+      final chambreModel = ChambreModel(name: chambre.name, surface: chambre.surface, temperature: chambre.temperature, zoneId: chambre.zoneId, entrepriseICE: chambre.entrepriseICE);
       try {
         return await _getMessage(() => chambreRemoteDataSource.addChambre(chambreModel));
       } catch (e) {
@@ -95,9 +93,6 @@ class ChambreRepositoryImplement implements ChambresRepository {
     }
   }
 
-
-  
-
   Future<Either<Failure, T>> _getMessage<T>(Future<T> Function() call) async {
     try {
       final result = await call();
@@ -108,8 +103,19 @@ class ChambreRepositoryImplement implements ChambresRepository {
     }
   }
 
-  
+  @override
+  Future<Either<Failure, Unit>> deleteChambre(int id) async {
+    return await _getMessage(() {
+      return chambreRemoteDataSource.deleteChambre(id);
+    });
+  }
 
+  @override
+  Future<Either<Failure, Unit>> updateChambre(Chambre chambre) async {
+    final ChambreModel chambreModel = ChambreModel(id: chambre.id, zoneId: chambre.zoneId, name: chambre.name, surface: chambre.surface, temperature: chambre.temperature);
 
-
+    return await _getMessage(() {
+      return chambreRemoteDataSource.updateChambre(chambreModel);
+    });
+  }
 }

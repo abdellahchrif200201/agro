@@ -36,7 +36,7 @@ class ChambresBloc extends Bloc<ChambresEvent, ChambresState> {
   ) async {
     emit(LoadingChambresState());
 
-    final failureOrChambres = await getAllChambres(null);
+    final failureOrChambres = await getAllChambres(event.page);
     emit(_mapFailureOrChambresToState(failureOrChambres));
   }
 
@@ -48,7 +48,7 @@ class ChambresBloc extends Bloc<ChambresEvent, ChambresState> {
   ) async {
     emit(LoadingChambresState());
 
-    final failureOrChambres = await getAllChambres(null);
+    final failureOrChambres = await getAllChambres(1);
     emit(_mapFailureOrChambresToState(failureOrChambres));
   }
 
@@ -72,7 +72,7 @@ class ChambresBloc extends Bloc<ChambresEvent, ChambresState> {
   ) async {
     emit(LoadingChambresState());
 
-    final failureOrChambres = await getAllChambres(null);
+    final failureOrChambres = await getAllChambres(1);
 
     final filteredChambres = failureOrChambres.fold(
       (failure) => <Chambre>[], // Return an empty list on failure
@@ -122,7 +122,7 @@ class ChambresBloc extends Bloc<ChambresEvent, ChambresState> {
     FilterChambresEvent event,
     Emitter<ChambresState> emit,
   ) async {
-    final failureOrChambre = await getAllChambres(null);
+    final failureOrChambre = await getAllChambres(1);
 
     failureOrChambre.fold(
       (failure) => emit(ErrorChambresState(message: _mapFailureToMessage(failure))),

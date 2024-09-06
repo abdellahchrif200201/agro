@@ -5,12 +5,14 @@ class Dropdown extends StatefulWidget {
   final List<String> dropDownItem;
   final String? label;
   final String hint;
+  final ValueChanged<String?>? onChanged; // Add this parameter
 
   const Dropdown({
     super.key,
     required this.dropDownItem,
     this.label,
     required this.hint,
+    this.onChanged, // Include this in constructor
   });
 
   @override
@@ -41,8 +43,8 @@ class _DropdownState extends State<Dropdown> {
           child: DropdownButtonFormField2<String>(
             isExpanded: true,
             decoration: const InputDecoration(
-              enabledBorder: InputBorder.none, // Remove border
-              focusedBorder: InputBorder.none, // Remove focus border
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
             ),
             hint: Text(
               widget.hint,
@@ -62,6 +64,9 @@ class _DropdownState extends State<Dropdown> {
               setState(() {
                 selectedValue = value;
               });
+              if (widget.onChanged != null) {
+                widget.onChanged!(value);
+              }
             },
             buttonStyleData: const ButtonStyleData(
               padding: EdgeInsets.only(right: 8),
@@ -111,7 +116,6 @@ class _DropdownState extends State<Dropdown> {
                 return (item.value.toString().toLowerCase().contains(searchValue.toLowerCase()));
               },
             ),
-            // This to clear the search value when you close the menu
             onMenuStateChange: (isOpen) {
               if (!isOpen) {
                 searchController.clear();

@@ -5,6 +5,7 @@ import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
 import 'package:devti_agro/features/Checklist/presontation/screens/check_list_screen.dart';
 import 'package:devti_agro/features/Nettoyage/Nettoyage_screen.dart';
 import 'package:devti_agro/features/Tracbalite/presentaion/screens/Tracbalite_screen.dart';
+import 'package:devti_agro/features/cataloge/presontaion/screens/cataloge_screen.dart';
 import 'package:devti_agro/features/chambre/presontaion/Chambres/chambre_screen.dart';
 import 'package:devti_agro/features/dashboard/HomePage.dart';
 import 'package:devti_agro/features/nutrition/presentaion/screens/nutrition_screen.dart';
@@ -34,6 +35,7 @@ final List<Map<String, dynamic>> menu = [
   {"title": "Checklist", "page": const ChecklistScreen()},
   {"title": "Etiquetage", "page": const EtiquetageScreen()},
   {"title": "Chambres", "page": const ChambreScreen()},
+  {"title": "Cataloge", "page": const CatalogeScreen()},
 ];
 
 class _CustomDrawerState extends State<CustomDrawer> {

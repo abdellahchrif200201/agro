@@ -1,9 +1,13 @@
+import 'package:devti_agro/core/strings/failures.dart';
 import 'package:devti_agro/core/widgets/custom_menu/checklist_menu_button.dart';
+import 'package:devti_agro/features/Checklist/application/bloc/add_delete_update_tache/add_delete_update_tache_bloc.dart';
 import 'package:devti_agro/features/Checklist/domain/entities/check_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../screens/create_Checklist_screen.dart';
 
 class ChecklistCard extends StatelessWidget {
   final CheckList checkList;
@@ -13,7 +17,7 @@ class ChecklistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Convert the date string to a DateTime object
-    final DateTime date = DateTime.parse(checkList.date!);
+    final DateTime date = DateTime.tryParse(checkList.date ?? '') ?? DateTime.now();
 
     return Container(
       padding: const EdgeInsets.all(10),
@@ -29,7 +33,14 @@ class ChecklistCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(checkList.tasksName!, style: Theme.of(context).textTheme.labelMedium),
+              Expanded(
+                child: Text(
+                  checkList.tasksName ?? "test",
+                  style: Theme.of(context).textTheme.labelMedium,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis, // This ensures the text is truncated if it exceeds maxLines
+                ),
+              ),
               Row(
                 children: [
                   const FaIcon(
@@ -38,16 +49,18 @@ class ChecklistCard extends StatelessWidget {
                   ),
                   ChecklistMenuButton(
                     onMenuItemSelected: (String value) {
-                      // Handle the selected menu option
                       switch (value) {
                         case 'Edit':
-                          // Handle edit action
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateChecklist(
+                                      checkList: checkList,
+                                    )), // Replace NextPage with your target page
+                          );
                           break;
                         case 'Delete':
-                          // Handle delete action
-                          break;
-                        case 'Share':
-                          // Handle share action
+                          _deleteUser(context);
                           break;
                       }
                     },
@@ -60,20 +73,13 @@ class ChecklistCard extends StatelessWidget {
           Row(
             children: [
               CheckListLocalContainer(
-                label: checkList.category!,
+                label: checkList.category ?? 'No Category',
                 icon: const FaIcon(
                   FontAwesomeIcons.layerGroup,
                   size: 15,
                 ),
               ),
               const SizedBox(width: 15),
-              CheckListLocalContainer(
-                label: checkList.zone!,
-                icon: const FaIcon(
-                  FontAwesomeIcons.earthAfrica,
-                  size: 15,
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -81,7 +87,7 @@ class ChecklistCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  checkList.description!,
+                  checkList.description ?? 'No Description',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(color: const Color(0xff717171)),
                 ),
               ),
@@ -99,6 +105,35 @@ class ChecklistCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _deleteUser(BuildContext context) async {
+    final deleteBloc = BlocProvider.of<AddDeleteUpdateTacheBloc>(context);
+
+    // Add delete user event
+    deleteBloc.add(DeleteTacheEvent(tacheId: checkList.id!));
+
+    // Listen for state changes
+    final state = await deleteBloc.stream.firstWhere(
+      (state) => state is ErrorAddDeleteUpdateTacheState || state is MessageAddDeleteUpdateTacheState,
+    );
+
+    if (state is MessageAddDeleteUpdateTacheState) {
+      // Check if message contains success confirmation
+      if (state.message == DELETE_SUCCESS_MESSAGE) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Checklist deleted successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete checklist')),
+        );
+      }
+    } else if (state is ErrorAddDeleteUpdateTacheState) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred')),
+      );
+    }
   }
 }
 

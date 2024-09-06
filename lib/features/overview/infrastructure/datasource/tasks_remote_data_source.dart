@@ -8,7 +8,6 @@ abstract class TasksRemoteDataSource {
   Future<List<TasksModel>> getAllTasks();
 }
 
-
 class TasksRemoteDataSourceImplement implements TasksRemoteDataSource {
   final http.Client client;
 
@@ -19,7 +18,7 @@ class TasksRemoteDataSourceImplement implements TasksRemoteDataSource {
   @override
   Future<List<TasksModel>> getAllTasks() async {
     final response = await client.get(
-      Uri.parse("$BASE_URL/MOBILE/Tache"),
+      Uri.parse("$BASE_URL/WEB/Tache"),
       headers: {
         "Content-Type": "application/json",
       },

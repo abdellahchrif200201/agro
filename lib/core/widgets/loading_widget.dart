@@ -1,20 +1,18 @@
-
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding:  EdgeInsets.symmetric(vertical: 20),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20),
       child: Center(
-        child: SizedBox(
-          height: 30,
-          width: 30,
-          child: CircularProgressIndicator(
-            color: Colors.black26,
-          ),
+        child: LoadingAnimationWidget.flickr(
+          leftDotColor: const Color(0xFF1A1A3F),
+          rightDotColor: const Color(0xFFEA3799),
+          size: 80,
         ),
       ),
     );

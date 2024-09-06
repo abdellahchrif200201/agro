@@ -8,7 +8,7 @@ class GetAllChambresUseCase{
 
   GetAllChambresUseCase(this.chambresRepository);
 
-  Future<Either<Failure , List<Chambre>>> call(int? page) async {
+  Future<Either<Failure , List<Chambre>>> call(int page) async {
     return await chambresRepository.getAllChambres(page);
   }
 }

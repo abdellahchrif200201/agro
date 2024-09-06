@@ -9,7 +9,7 @@ class ChecklistMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      color: Colors.amber,
+      color: const Color.fromARGB(255, 173, 170, 170),
       icon: const FaIcon(
         FontAwesomeIcons.ellipsis,
         color: Colors.black,
@@ -33,16 +33,6 @@ class ChecklistMenuButton extends StatelessWidget {
               Icon(Icons.delete),
               SizedBox(width: 10),
               Text('Delete'),
-            ],
-          ),
-        ),
-        const PopupMenuItem<String>(
-          value: 'Share',
-          child: Row(
-            children: [
-              Icon(Icons.share),
-              SizedBox(width: 10),
-              Text('Share'),
             ],
           ),
         ),

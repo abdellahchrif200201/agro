@@ -3,6 +3,7 @@ import 'package:devti_agro/core/config/theme/palette.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/features/overview/presontaion/pages/overview.dart';
+import 'package:devti_agro/features/products/presentaion/screens/product_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final List<String> menu = ["Overview", "Analytics", "Temperature", "Tasks"];
+  final List<String> menu = ["Overview", "products", "Temperature", "Tasks"];
   String _currentPage = "Overview"; // Default page
   String _selectedMenu = "Overview"; // Default selected menu item
 
@@ -25,8 +26,8 @@ class _HomepageState extends State<Homepage> {
     switch (page) {
       case "Overview":
         return const OverViewTabView();
-      case "Analytics":
-        return const Center(child: Text("Analytics Page Content", style: TextStyle(fontSize: 24)));
+      case "products":
+        return const ProductScreen();
       case "Temperature":
         return const Center(child: Text("Temperature Page Content", style: TextStyle(fontSize: 24)));
       case "Tasks":

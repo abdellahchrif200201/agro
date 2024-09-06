@@ -3,15 +3,23 @@ import 'package:devti_agro/core/widgets/Custom_form_element/FomElement.dart';
 import 'package:devti_agro/core/widgets/custom_button/custom_btn.dart';
 import 'package:devti_agro/core/widgets/custom_refresh_error/refresh_data_in_dropDown.dart';
 import 'package:devti_agro/features/chambre/application/bloc/create_chambre_bloc/add_chambre_bloc.dart';
+import 'package:devti_agro/features/chambre/application/bloc/delete_update_chambre/delete_update_chambre_bloc.dart';
 import 'package:devti_agro/features/chambre/application/bloc/get_chambres_bloc/chambres_bloc.dart';
+import 'package:devti_agro/features/chambre/application/models/chambre_model.dart';
+import 'package:devti_agro/features/chambre/domain/entities/Chambre.dart';
 import 'package:devti_agro/features/chambre/presontaion/Chambres/chambre_screen.dart';
 import 'package:devti_agro/features/zone/aplication/bloc/zone/bloc/zone_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart'; // Fixed import path
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import '../../../../core/strings/failures.dart'; // Fixed import path
 
 class CreateChambre extends StatefulWidget {
+  final Chambre? chambre;
+  CreateChambre({this.chambre});
+
   @override
   _CreateChambreState createState() => _CreateChambreState();
 }
@@ -22,6 +30,18 @@ class _CreateChambreState extends State<CreateChambre> {
   final TextEditingController temperatureController = TextEditingController();
 
   String? selectedZone;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.chambre != null) {
+      nameController.text = widget.chambre!.name;
+      surfaceController.text = widget.chambre!.surface.toString();
+      temperatureController.text = widget.chambre!.temperature.toString();
+      selectedZone = widget.chambre!.zoneName;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +106,7 @@ class _CreateChambreState extends State<CreateChambre> {
                       }
 
                       return DropdownTwo(
-                        hint: "Select zone",
+                        hint: selectedZone ?? "Select zone",
                         dropDownItems: options,
                         onChanged: (value) {
                           setState(() {
@@ -118,7 +138,7 @@ class _CreateChambreState extends State<CreateChambre> {
               ),
               const SizedBox(height: 50.0),
               CustomButton(
-                text: "Create",
+                text: widget.chambre != null ? "update chambre" : "create chambre",
                 onPressed: () {
                   final name = nameController.text;
                   final surface = double.tryParse(surfaceController.text) ?? 0.0;
@@ -131,38 +151,59 @@ class _CreateChambreState extends State<CreateChambre> {
                     );
                     return;
                   }
+                  if (widget.chambre == null) {
+                    context.read<AddChambreBloc>().add(
+                          AddChambreButtonPressed(
+                            name: name,
+                            entrepriseICE: 4531847, // Adjust as needed
+                            zoneId: 1, // Adjust as needed
+                            surface: surface,
+                            temperature: temperature,
+                          ),
+                        );
 
-                  context.read<AddChambreBloc>().add(
-                        AddChambreButtonPressed(
+                    context.read<ChambresBloc>().add(RefreshChambresEvent());
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChambreScreen()));
+                  } else {
+                    _updateChambre(
+                        context,
+                        ChambreModel(
+                          id: widget.chambre!.id,
                           name: name,
-                          entrepriseICE: 4531847, // Adjust as needed
-                          zoneId: 1, // Adjust as needed
                           surface: surface,
                           temperature: temperature,
-                        ),
-                      );
-
-                  context.read<ChambresBloc>().add(RefreshChambresEvent());
-
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChambreScreen()));
-
-                  // Optionally, you can clear the fields after submitting
-                  // nameController.clear();
-                  // surfaceController.clear();
-                  // temperatureController.clear();
+                          zoneId: widget.chambre!.zoneId,
+                        ));
+                  }
                 },
               ),
-              // Container(
-              //   width: 500,
-              //   child: FloatingActionButton.extended(
-              //     onPressed: () => print("test"),
-              //     label: Text("save"),
-              //   ),
-              // )
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _updateChambre(BuildContext context, ChambreModel chambreModel) async {
+    final bloc = BlocProvider.of<AddDeleteUpdateChambreBloc>(context);
+
+    bloc.add(UpdateChambreEvent(chambre: chambreModel));
+
+    final state = await bloc.stream.firstWhere(
+      (state) => state is ErrorDeleteUpdateChambreState || state is MessageDeleteUpdateChambreState,
+    );
+
+    if (state is MessageDeleteUpdateChambreState && state.message == UPDATE_SUCCESS_MESSAGE) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ChambreScreen()),
+      );
+      context.read<ChambresBloc>().add(RefreshChambresEvent());
+      print("lmard");
+    } else {
+      // Handle error
+      print('non');
+    }
   }
 }

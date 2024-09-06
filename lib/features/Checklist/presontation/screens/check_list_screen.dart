@@ -4,8 +4,9 @@ import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/core/widgets/custom_filter_button/CustomFilter.dart';
 import 'package:devti_agro/core/widgets/custom_refresh_error/refresh_data_in_screen.dart';
 import 'package:devti_agro/core/widgets/date_range_picker/date_range_picker.dart';
+import 'package:devti_agro/core/widgets/loading_widget.dart';
 import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
-import 'package:devti_agro/features/Checklist/application/bloc/check_list_bloc.dart';
+import 'package:devti_agro/features/Checklist/application/bloc/get_all_check_list/check_list_bloc.dart';
 import 'package:devti_agro/features/Checklist/presontation/screens/create_Checklist_screen.dart';
 import 'package:devti_agro/features/Checklist/presontation/widgets/check_list_filter_helper.dart';
 // packages
@@ -96,7 +97,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   // print('Current state: $state'); // Log the current state
 
                   if (state is LoadingCheckListState) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const LoadingWidget();
                   } else if (state is LoadedCheckListState) {
                     final checkLists = state.checkList;
                     if (checkLists.isEmpty) {
@@ -114,7 +115,6 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                         context.read<CheckListBloc>().add(RefreshCkeckListEvent());
                       },
                     );
-                    
                   } else {
                     return Center(child: Text('Unexpected state: $state'));
                   }
