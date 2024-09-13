@@ -18,6 +18,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({required this.userUseCase}) : super(UserInitial()) {
     on<GetAllUserEvent>(_onGetAllUser);
     on<RefreshUserEvent>(_onRefreshUsers);
+    on<SearchUserEvent>(_onSearchUser);
   }
 
   Future<void> _onGetAllUser(
@@ -41,6 +42,32 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     emit(_mapFailureOrUserToState(failureOrUser));
   }
 
+
+  Future<void> _onSearchUser(
+    SearchUserEvent event,
+    Emitter<UserState> emit,
+  ) async {
+    emit(LoadingUserState());
+
+    final failureOrUser = await userUseCase();
+
+    final filteredUser = failureOrUser.fold(
+      (failure) => <User>[], // Return an empty list on failure
+      (chambres) {
+        final chambreList = chambres.cast<User>();
+        return chambreList.where((chambre) {
+          return chambre.name.toLowerCase().contains(event.searchText.toLowerCase());
+        }).toList();
+      },
+    );
+    if (filteredUser.isEmpty && failureOrUser.isLeft()) {
+      final failure = failureOrUser.fold((l) => l, (_) => null);
+      emit(ErrorUserState(message: _mapFailureToMessage(failure!)));
+    } else {
+      emit(LoadedUserState(users: filteredUser));
+    }
+  }
+
   UserState _mapFailureOrUserToState(
     Either<Failure, List<User>> either,
   ) {
@@ -62,3 +89,4 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 }
+

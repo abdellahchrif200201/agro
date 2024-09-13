@@ -1,3 +1,4 @@
+import 'package:devti_agro/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -16,23 +17,23 @@ class ChecklistMenuButton extends StatelessWidget {
       ),
       onSelected: onMenuItemSelected,
       itemBuilder: (BuildContext context) => [
-        const PopupMenuItem<String>(
+        PopupMenuItem<String>(
           value: 'Edit',
           child: Row(
             children: [
               Icon(Icons.edit),
               SizedBox(width: 10),
-              Text('Edit'),
+              Text(S.of(context).edit),
             ],
           ),
         ),
-        const PopupMenuItem<String>(
+        PopupMenuItem<String>(
           value: 'Delete',
           child: Row(
             children: [
               Icon(Icons.delete),
               SizedBox(width: 10),
-              Text('Delete'),
+              Text(S.of(context).delete),
             ],
           ),
         ),

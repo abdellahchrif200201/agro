@@ -92,4 +92,42 @@ class UserRepoImplement implements UserRepo {
       return userRemoteDataSource.updateUser(userModel);
     });
   }
+  
+  @override
+  Future<Either<Failure, User>> showUser(int idUser) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteUserResponse = await userRemoteDataSource.showUser(idUser);
+        return right(remoteUserResponse);
+      } on ServerException {
+        return left(ServerFailure());
+      } catch (e) {
+        print('Unexpected error User: $e');
+        return left(UnexpectedFailure());
+      }
+    } else {
+      return left(OfflineFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<User>>> getUserByName(String name) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteUsersResponse = await userRemoteDataSource.getAllUser();
+        final List<User> chambres = remoteUsersResponse.map((json) => UserModel.fromJson(json as Map<String, dynamic>)).toList();
+        final filteredUsers = chambres.where((chambre) {
+          return chambre.name.toLowerCase().contains(name.toLowerCase());
+        }).toList();
+        return right(filteredUsers);
+      } on ServerException {
+        return left(ServerFailure());
+      } catch (e) {
+        print('Unexpected error: $e');
+        return left(UnexpectedFailure());
+      }
+    } else {
+      return left(OfflineFailure());
+    }
+  }
 }

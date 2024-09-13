@@ -14,21 +14,22 @@ class RegisterHelper {
   final TextEditingController countryController;
   final TextEditingController nameController;
   final TextEditingController emailController;
+  final bool isRun;
 
-  RegisterHelper({
-    required this.context,
-    required this.formKey,
-    required this.passwordController,
-    required this.confirmPasswordController,
-    required this.entrepriseICEController,
-    required this.phoneController,
-    required this.addressController,
-    required this.countryController,
-    required this.nameController,
-    required this.emailController,
-  });
+  RegisterHelper(
+      {required this.context,
+      required this.formKey,
+      required this.passwordController,
+      required this.confirmPasswordController,
+      required this.entrepriseICEController,
+      required this.phoneController,
+      required this.addressController,
+      required this.countryController,
+      required this.nameController,
+      required this.emailController,
+      this.isRun = true});
 
-  void register() {
+  Future<void> register() async {
     if (formKey.currentState?.validate() ?? false) {
       final String password = passwordController.text;
       final String confirmPassword = confirmPasswordController.text;
@@ -65,10 +66,11 @@ class RegisterHelper {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => LoginScreen(
-                  email: emailController.text,
-                  password: password,
-                )),
+          builder: (context) => LoginScreen(
+            email: emailController.text,
+            password: password,
+          ),
+        ),
       );
     }
   }

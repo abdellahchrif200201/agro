@@ -1,6 +1,7 @@
 // import 'package:devti_agro/core/router/routes.dart';
 import 'package:devti_agro/core/widgets/Custom_FilterBottomSheet/FilterBottomSheet.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
+import 'package:devti_agro/core/widgets/custom_data_is_empty/custom_data_is_empty.dart';
 import 'package:devti_agro/core/widgets/custom_data_table/custom_data_table.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/core/widgets/custom_filter_button/CustomFilter.dart';
@@ -9,6 +10,7 @@ import 'package:devti_agro/core/widgets/loading_widget.dart';
 import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
 import 'package:devti_agro/features/Etiquetage/aplication/bloc/etiquetage_bloc.dart';
 import 'package:devti_agro/features/Etiquetage/presontation/screens/create_equetage_screen.dart';
+// import 'package:devti_agro/features/nutrition/application/bloc/nutrition_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -102,7 +104,11 @@ class EtiquetageScreen extends StatelessWidget {
                 if (state is LoadingEtiquetageState) {
                   return const LoadingWidget();
                 } else if (state is LoadedEtiquetageState) {
-                  final List<List<String>> rowData = state.etiquetage.map((etiquetage) {
+                  final data = state.etiquetage;
+                  if (data.isEmpty) {
+                    return CustomDataIsEmpty(onPressed: () => context.read<EtiquetageBloc>().add(RefreshEtiquetageEvent()));
+                  }
+                  final List<List<String>> rowData = data.map((etiquetage) {
                     return [etiquetage.name, etiquetage.category, etiquetage.dateDDM.substring(2), etiquetage.dateDLC.substring(2)];
                   }).toList();
 

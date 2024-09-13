@@ -1,5 +1,6 @@
 import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
+import 'package:devti_agro/core/widgets/custom_data_is_empty/custom_data_is_empty.dart';
 import 'package:devti_agro/core/widgets/custom_data_table/custom_data_table.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/core/widgets/custom_filter_button/CustomFilter.dart';
@@ -110,7 +111,11 @@ class NutritionScreen extends StatelessWidget {
                   if (state is LoadingNutritionState) {
                     return const LoadingWidget();
                   } else if (state is LoadedNutritionState) {
-                    final List<List<String>> rowData = state.nutrition.map(
+                    final data = state.nutrition;
+                    if (data.isEmpty) {
+                      return CustomDataIsEmpty(onPressed: () => context.read<NutritionBloc>().add(RefreshNutritionEvent()));
+                    }
+                    final List<List<String>> rowData = data.map(
                       (nutrition) {
                         return [
                           nutrition.name, // Name of the item

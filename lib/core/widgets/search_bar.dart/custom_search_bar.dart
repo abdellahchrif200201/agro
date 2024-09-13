@@ -56,11 +56,11 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
-          borderSide: BorderSide(color: Colors.blue),
+          borderSide: const BorderSide(color: Colors.green),
         ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         suffixIcon: IconButton(
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
           onPressed: _onSearchIconPressed,
         ),
       ),

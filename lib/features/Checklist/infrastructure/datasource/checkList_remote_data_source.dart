@@ -6,6 +6,7 @@ import 'package:devti_agro/core/error/exeptions.dart';
 import 'package:devti_agro/features/Checklist/application/models/check_list_model.dart';
 import 'package:devti_agro/features/Checklist/domain/entities/check_list.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 import '../../../../core/api/api_route.dart';
 
@@ -20,6 +21,8 @@ class ChecklistRemoteDataSourceImplement implements ChecklistRemoteDataSource {
   final http.Client client;
   ChecklistRemoteDataSourceImplement({required this.client});
 
+  Logger logger = Logger();
+
   @override
   Future<List<CheckList>> getAllCheckList() async {
     final response = await client.get(Uri.parse('$BASE_URL/WEB/Tache'), headers: {"Content-type": "application/json"});
@@ -28,7 +31,14 @@ class ChecklistRemoteDataSourceImplement implements ChecklistRemoteDataSource {
       final Map<String, dynamic> decodedJson = json.decode(response.body);
       final List<dynamic> data = decodedJson["data"];
       final List<CheckList> checkList = data.map<CheckList>((jsonCheckListModel) => CheckListModel.fromJson(jsonCheckListModel)).toList();
+      // final Map<String, dynamic> decodedJson = json.decode(response.body);
 
+      // final Map<String, dynamic> decodedJson = json.decode(response.body) as Map<String, dynamic>;
+
+      // final List<dynamic> data = decodedJson['data'];
+      // final List<CheckListModel> checkList = data.map<CheckListModel>((jsonChambreModel) {
+      //   return CheckListModel.fromJson({'data': jsonChambreModel, 'meta': decodedJson['meta']});
+      // }).toList();
       return checkList;
     } else {
       throw ServerException();
@@ -43,10 +53,10 @@ class ChecklistRemoteDataSourceImplement implements ChecklistRemoteDataSource {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      logger.d(response.body);
       return Future.value(unit);
     } else {
-      print(response.body);
+      logger.d(response.body);
       throw ServerException();
     }
   }
@@ -69,26 +79,41 @@ class ChecklistRemoteDataSourceImplement implements ChecklistRemoteDataSource {
       body: jsonEncode(body), // Encode the body as JSON
     );
 
-    if (response.statusCode == 201) {
-      print(response.body);
-      return Future.value(unit);
+    final responseBody = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      logger.d("created succseful");
+
+      logger.d(responseBody);
+
+      if (responseBody["status"] == 201) {
+        // Login successful, save the token
+
+        logger.d(responseBody);
+        logger.d("create sucsses");
+        return Future.value(unit);
+      } else {
+        // Handle unexpected response codes or messages
+        throw ServerException(message: responseBody["message  "] ?? "Unexpected error");
+      }
     } else {
-      print(response.body);
-      throw ServerException();
+      logger.d("no create chambres");
+      final errorMessage = responseBody["error"] ?? "Server error";
+      throw ServerException(message: errorMessage);
     }
   }
 
   @override
   Future<Unit> updateTache(CheckListModel checkListModel) async {
     final tacheId = checkListModel.id.toString();
-    print("iddddddddddddddddd $tacheId");
+    logger.d("iddddddddddddddddd $tacheId");
 
     final taskName = checkListModel.tasksName;
 
-    print("iddddddddddddddddd $taskName");
+    logger.d("iddddddddddddddddd $taskName");
 
     if (tacheId.isEmpty) {
-      print('Invalid task ID: $tacheId');
+      logger.d('Invalid task ID: $tacheId');
       throw Exception('Task ID is null or empty');
     }
     final body = {
@@ -110,10 +135,10 @@ class ChecklistRemoteDataSourceImplement implements ChecklistRemoteDataSource {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      logger.d(response.body);
       return Future.value(unit);
     } else {
-      print(response.body);
+      logger.d(response.body);
 
       throw ServerException();
     }

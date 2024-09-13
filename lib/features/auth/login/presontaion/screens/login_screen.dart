@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const SizedBox(height: 100),
                     const Text(
-                      "Login",
+                      "connexion",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 26,
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      "Enter your email and password below to login to your account",
+                      "Entrez votre email et mot de passe ci-dessous pour vous connecter à votre compte",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,
@@ -79,14 +79,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     CustomTextField(
                       controller: emailController,
                       labelText: "Email",
-                      hintText: "Enter your email",
+                      hintText: "Entrez votre email",
                       suffixIcon: const Icon(Icons.email),
                     ),
                     const SizedBox(height: 20),
                     CustomTextField(
                       controller: passwordController,
-                      labelText: "Password",
-                      hintText: "Enter your password",
+                      labelText: "Mot de passe",
+                      hintText: "Entrez votre mot de passe",
                       obscureText: true,
                       suffixIcon: Icon(
                         _obscureText ? Icons.visibility_off : Icons.visibility,
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 20),
                     CustomButton(
-                      text: "Sign in with Email",
+                      text: "Se connecter avec un email",
                       onPressed: () {
                         setState(() {
                           isLoading = true;
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                            "OR CONTINUE WITH",
+                            "OU CONTINUER AVEC",
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                   color: const Color(0xff616161),
                                   fontSize: 11,
@@ -144,14 +144,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 20),
                     RichText(
                       text: TextSpan(
-                        text: "Don't have an account? ",
+                        text: "Vous n'avez pas de compte ?",
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 16,
                         ),
                         children: [
                           TextSpan(
-                            text: "Register",
+                            text: "Inscrivez-vous",
                             style: const TextStyle(
                               color: Colors.blue,
                               fontSize: 16,
@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 100,
                     ),
                     CustomButton(
-                      text: "conextion en tant qu invite",
+                      text: "Connexion en tant qu'invité",
                       textColor: Colors.green,
                       borderColor: Colors.green,
                       border: true,

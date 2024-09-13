@@ -2,7 +2,6 @@ import 'package:devti_agro/core/widgets/Custom_FilterBottomSheet/FilterBottomShe
 import 'package:devti_agro/features/Checklist/application/bloc/get_all_check_list/check_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class CheckListFilterHelper {
   final BuildContext context;
@@ -15,17 +14,17 @@ class CheckListFilterHelper {
     showFilterBottomSheet(
       context: context,
       title: 'Filter by',
-      filterOptions: ['nom','date'],
+      filterOptions: ['nom', 'date'],
       filterActions: {
         'nom': () {
           if (isAsN) {
-             BlocProvider.of<CheckListBloc>(context).add(const FilterCheckListEvent(filterType: 'nom', isAscending: true));
+            BlocProvider.of<CheckListBloc>(context).add(const FilterCheckListEvent(filterType: 'nom', isAscending: true));
             isAsN = false;
           } else {
-             BlocProvider.of<CheckListBloc>(context).add(const FilterCheckListEvent(filterType: 'nom', isAscending: false));
+            BlocProvider.of<CheckListBloc>(context).add(const FilterCheckListEvent(filterType: 'nom', isAscending: false));
             isAsN = true;
           }
-          context.pop();
+          Navigator.pop(context);
         },
         'date': () {
           if (isAsD) {
@@ -35,9 +34,8 @@ class CheckListFilterHelper {
             BlocProvider.of<CheckListBloc>(context).add(const FilterCheckListEvent(filterType: 'date', isAscending: false));
             isAsD = true;
           }
-          context.pop();
+          Navigator.pop(context);
         },
-        
       },
     );
   }

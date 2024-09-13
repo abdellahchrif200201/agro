@@ -3,7 +3,8 @@ import 'package:devti_agro/core/config/theme/palette.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/features/overview/presontaion/pages/overview.dart';
-import 'package:devti_agro/features/products/presentaion/screens/product_screen.dart';
+import 'package:devti_agro/features/user/aplication/bloc/bloc/show_user_bloc.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,7 @@ class _HomepageState extends State<Homepage> {
       case "Overview":
         return const OverViewTabView();
       case "products":
-        return const ProductScreen();
+        return const Center(child: Text("Temperature Page Content", style: TextStyle(fontSize: 24)));
       case "Temperature":
         return const Center(child: Text("Temperature Page Content", style: TextStyle(fontSize: 24)));
       case "Tasks":
@@ -55,6 +56,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
+    context.read<ShowUserBloc>().add(FetchUserEvent(69));
     return Scaffold(
       appBar: CustomAppbar(
         title: "Dashboard",

@@ -37,8 +37,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //   });
   // }
 
-
-
   void _nextPage() {
     if (_formKey1.currentState?.validate() ?? false) {
       _pageController.nextPage(
@@ -48,9 +46,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-   void _register() {
+  void _register() {
     setState(() {
-      isLoding = true;
+      isLoding = true; // Set loading to true
     });
 
     RegisterHelper(
@@ -64,7 +62,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       countryController: _countryController,
       nameController: _nameController,
       emailController: _emailController,
-    ).register();
+    ).register().then((_) {
+      // Stop loading after registration logic is complete
+      setState(() {
+        isLoding = false;
+      });
+    }).catchError((error) {
+      // Stop loading in case of an error
+      setState(() {
+        isLoding = false;
+      });
+    });
   }
 
   @override
@@ -109,35 +117,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Register",
+                "Inscription",
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               const Text(
-                "Enter your information to create an account",
+                "Entrez vos informations pour créer un compte",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Color.fromARGB(139, 0, 0, 0)),
               ),
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _nameController,
                 // labelText: "Name",
-                hintText: "Enter your name",
+                hintText: "Entrez votre nom",
                 suffixIcon: const Icon(Icons.person),
               ),
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _emailController,
                 labelText: "Email",
-                hintText: "Enter your email",
+                hintText: "Entrez votre email",
                 suffixIcon: const Icon(Icons.email),
               ),
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _passwordController,
-                labelText: "Password",
-                hintText: "Enter your password",
+                labelText: "Mot de passe",
+                hintText: "Entrez votre Mot de passe",
                 obscureText: _obscureText,
                 suffixIcon: Icon(
                   _obscureText ? Icons.visibility_off : Icons.visibility,
@@ -146,8 +154,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _confirmPasswordController,
-                labelText: "Confirm Password",
-                hintText: "Re-enter your password",
+                labelText: "Confirmez le mot de passe",
+                hintText: "Ressaisissez votre mot de passe",
                 obscureText: _confirmObscureText,
                 suffixIcon: Icon(
                   _obscureText ? Icons.visibility_off : Icons.visibility,
@@ -156,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 100),
               CustomButton(
                   onPressed: _nextPage,
-                  text: "page suivent",
+                  text: "Page suivante",
                   backgroundColor: Colors.green,
                   child: isLoding
                       ? LoadingAnimationWidget.twistingDots(
@@ -174,8 +182,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     MaterialPageRoute(builder: (context) => const LoginScreen()),
                   );
                 },
-                spanText: "login",
-                text: "Already have an account?",
+                spanText: "Connexion",
+                text: "Vous avez déjà un compte ?",
               )
             ],
           ),
@@ -194,50 +202,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Register",
+                "Inscription",
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               const Text(
-                "Enter your information to create an account",
+                "Entrez vos informations pour créer un compte",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Color.fromARGB(139, 0, 0, 0)),
               ),
               const SizedBox(height: 10),
               CustomTextField(
                 controller: _entrepriseICEController,
                 labelText: "Entreprise ICE",
-                hintText: "Enter your entreprise ICE",
+                hintText: "Entrez votre entreprise ICE",
                 keyboardType: TextInputType.number,
                 suffixIcon: const Icon(Icons.toc),
               ),
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _phoneController,
-                labelText: "Phone Number",
-                hintText: "Enter your phone number",
+                labelText: "Numéro de téléphone",
+                hintText: "Entrez votre numéro de téléphone",
                 keyboardType: TextInputType.number,
                 suffixIcon: const Icon(Icons.phone),
               ),
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _addressController,
-                labelText: "Address",
-                hintText: "Enter your address",
+                labelText: "Adresse",
+                hintText: "Entrez votre adresse",
                 suffixIcon: const Icon(Icons.location_on),
               ),
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _countryController,
-                labelText: "Country",
-                hintText: "Enter your country",
+                labelText: "Pays",
+                hintText: "Entrez votre pays",
                 suffixIcon: const Icon(Icons.flag),
               ),
               const SizedBox(height: 30),
               CustomButton(
                 onPressed: _register,
-                text: "register",
+                isRun: false,
+                text: "Inscription",
                 backgroundColor: Colors.green,
               ),
               const SizedBox(height: 100),
@@ -249,8 +258,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     MaterialPageRoute(builder: (context) => const LoginScreen()),
                   );
                 },
-                spanText: "login",
-                text: "Already have an account?",
+                spanText: "Connexion",
+                text: "Vous avez déjà un compte ?",
               )
             ],
           ),

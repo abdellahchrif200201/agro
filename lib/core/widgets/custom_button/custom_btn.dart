@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -8,8 +9,10 @@ class CustomButton extends StatelessWidget {
   final Color? textColor;
   final bool border;
   final Color? borderColor;
+  final bool isRun;
 
-  const CustomButton({super.key, required this.text, required this.onPressed, this.backgroundColor, this.child, this.textColor = Colors.white, this.border = false, this.borderColor});
+  const CustomButton(
+      {super.key, required this.text, required this.onPressed, this.backgroundColor, this.child, this.textColor = Colors.white, this.border = false, this.borderColor, this.isRun = false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +31,20 @@ class CustomButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: textColor,
-                  ),
-            ),
+            if (isRun == false)
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: textColor,
+                    ),
+              ),
+            if (isRun == true)
+              LoadingAnimationWidget.flickr(
+                leftDotColor: const Color(0xFF1A1A3F),
+                rightDotColor: const Color(0xFFEA3799),
+                size: 30,
+              ),
             if (child != null)
               const SizedBox(
                 width: 10,

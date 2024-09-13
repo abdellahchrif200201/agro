@@ -13,5 +13,8 @@ abstract class UserRepo {
   Future<Either<Failure, Unit>> deleteUser(int id);
   Future<Either<Failure, Unit>> addUser(User user);
   Future<Either<Failure, Unit>> updateUser(User user);
+  Future<Either<Failure, User>> showUser(int idUser);
+    Future<Either<Failure, List<User>>> getUserByName(String name);
+
   
 }

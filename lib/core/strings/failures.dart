@@ -9,4 +9,5 @@ const String OFFLINE_FAILURE_MESSAGE = 'Please Check your Internet Connection';
 const String DELETE_SUCCESS_MESSAGE = "User successfully deleted.";
 const String SERVER_FAILURE_MESSAGE = "Server error. Please try again later.";
 const String ADD_SUCCESS_MESSAGE = "User successfully added";
+const String ADD_TACHE_SUCCESS_MESSAGE = "Tache created successfully!";
 const String UPDATE_SUCCESS_MESSAGE = "tache successfully updated";

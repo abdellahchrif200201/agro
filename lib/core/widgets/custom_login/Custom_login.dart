@@ -23,7 +23,7 @@ class CustomLogin extends StatelessWidget {
           children: [
             Text(
               "se connecter",
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w400, color: const Color(0xff059212)),
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w400, color: const Color(0xff059212), fontSize: 16),
             ),
             const Icon(
               Ionicons.log_in_outline,

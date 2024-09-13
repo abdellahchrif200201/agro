@@ -1,5 +1,6 @@
 import 'package:devti_agro/core/widgets/Custom_dropdown/dorp_down_two.dart';
-import 'package:devti_agro/core/widgets/Custom_form_element/FomElement.dart';
+// import 'package:devti_agro/core/widgets/Custom_form_element/FomElement.dart';
+import 'package:devti_agro/core/widgets/Custom_form_element/text_field_widget.dart';
 import 'package:devti_agro/core/widgets/custom_button/custom_btn.dart';
 import 'package:devti_agro/core/widgets/custom_refresh_error/refresh_data_in_dropDown.dart';
 import 'package:devti_agro/features/Fournisseur/aplication/bloc/add_role_bloc/bloc/Fournisseur_bloc.dart';
@@ -33,8 +34,8 @@ class _CreateCatalogeScreeenState extends State<CreateCatalogeScreeen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
-          "create cataloge",
+        title: const Text(
+          "Ajoute cataloge",
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
@@ -55,84 +56,80 @@ class _CreateCatalogeScreeenState extends State<CreateCatalogeScreeen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
-              FormElement(
-                hint: "Reference",
-                label: "Reference",
+              TextFieldWidget(
+                hintText: "Reference",
                 controller: nameController,
               ),
               const SizedBox(height: 16),
-              FormElement(
-                hint: "Désignation",
-                label: "Désignation",
+              TextFieldWidget(
+                hintText: "Désignation",
                 controller: surfaceController,
               ),
               const SizedBox(height: 16.0),
-              FormElement(
-                hint: "Prix",
-                label: "Prix",
-                keyboardType: TextInputType.number,
+              TextFieldWidget(
+                hintText: "Prix",
+
+                // keyboardType: TextInputType.number,
                 controller: temperatureController,
               ),
               const SizedBox(height: 16.0),
-              FormElement(
-                hint: "Quantite Unitaire",
-                label: "Quantite Unitaire",
+              TextFieldWidget(
+                hintText: "Quantite Unitaire",
+
                 controller: temperatureController,
-                keyboardType: TextInputType.number,
+                // keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 16),
-              FormElement(
-                hint: "Select Fournisseur",
-                label: "Fournisseur",
-                child: BlocBuilder<FournisseurBloc, FournisseurState>(
-                  builder: (context, state) {
-                    if (state is LoadingFournisseurState) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text("loading.."),
-                            LoadingAnimationWidget.newtonCradle(
-                              color: Color.fromARGB(255, 13, 200, 63),
-                              size: 30,
-                            ),
-                          ],
-                        ),
-                      );
-                    } else if (state is LoadedFournisseurState) {
-                      final List<String> options = state.fournisseurs.map((zone) => zone.name).toList();
+              BlocBuilder<FournisseurBloc, FournisseurState>(
+                builder: (context, state) {
+                  if (state is LoadingFournisseurState) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text("loading.."),
+                          LoadingAnimationWidget.newtonCradle(
+                            color: Color.fromARGB(255, 13, 200, 63),
+                            size: 30,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is LoadedFournisseurState) {
+                    final List<String> options = state.fournisseurs.map((zone) => zone.name).toList();
 
-                      // Reset selectedZone if it is not in the options
-                      if (selectedZone != null && !options.contains(selectedZone)) {
-                        setState(() {
-                          selectedZone = options.isNotEmpty ? options[0] : null;
-                        });
-                      }
-
-                      return DropdownTwo(
-                        hint: selectedZone ?? "Select Fournisseur",
-                        dropDownItems: options,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedZone = value;
-                          });
-                        },
-                      );
-                    } else if (state is ErrorFournisseurState) {
-                      return RefreshData(
-                        onPressed: () => context.read<FournisseurBloc>().add(GetAllFournisseurEvent()),
-                      );
+                    // Reset selectedZone if it is not in the options
+                    if (selectedZone != null && !options.contains(selectedZone)) {
+                      setState(() {
+                        selectedZone = options.isNotEmpty ? options[0] : null;
+                      });
                     }
 
-                    return const Center(child: Text("loading ..."));
-                  },
-                ),
+                    return DropdownTwo(
+                      border: true,
+                      hint: selectedZone ?? "Select Fournisseur",
+                      dropDownItems: options,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedZone = value;
+                        });
+                      },
+                    );
+                  } else if (state is ErrorFournisseurState) {
+                    return RefreshData(
+                      onPressed: () => context.read<FournisseurBloc>().add(GetAllFournisseurEvent()),
+                    );
+                  }
+
+                  return const Center(child: Text("loading ..."));
+                },
               ),
               const SizedBox(height: 50.0),
               CustomButton(
-                text: "create cataloge",
-                onPressed: () => print("test"),)
+                text: "Ajoute cataloge",
+                onPressed: () => print("test"),
+              )
             ],
           ),
         ),

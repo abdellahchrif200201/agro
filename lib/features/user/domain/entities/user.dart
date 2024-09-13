@@ -9,5 +9,18 @@ class User {
   final String? ville;
   final String? password;
   final int entrepriseId;
-  User({this.id, required this.name, this.adresse, this.email, this.image, this.password, this.pays, this.telephone, this.ville, required this.entrepriseId});
+
+  final int? pageFrom;
+  final int? pageCurrent;
+  final int? lastPage;
+  User({this.id, 
+  required this.name, 
+  this.adresse, this.email,
+   this.image, this.password,
+    this.pays, this.telephone, 
+    this.ville, required this.entrepriseId,
+    this.pageFrom,
+    this.lastPage,
+    this.pageCurrent
+    });
 }

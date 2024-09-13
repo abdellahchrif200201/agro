@@ -1,4 +1,5 @@
 import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
+import 'package:devti_agro/core/lang/bloc/language_bloc.dart';
 import 'package:devti_agro/core/router/bloc/auth_bloc.dart';
 import 'package:devti_agro/features/Checklist/application/bloc/add_delete_update_tache/add_delete_update_tache_bloc.dart';
 import 'package:devti_agro/features/Checklist/application/use_cases/add_tache_use_case.dart';
@@ -68,10 +69,12 @@ import 'package:devti_agro/features/role/aplication/usecase/role_use_case.dart';
 import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo.dart';
 import 'package:devti_agro/features/role/infrastructure/data/role_remote_data_source.dart';
 import 'package:devti_agro/features/role/infrastructure/ropositories/role_repo_implement.dart';
+import 'package:devti_agro/features/user/aplication/bloc/bloc/show_user_bloc.dart';
 import 'package:devti_agro/features/user/aplication/bloc/delete_add_update_user/delete_add_update_user_bloc.dart';
 import 'package:devti_agro/features/user/aplication/bloc/get_user_bloc/user_bloc.dart';
 import 'package:devti_agro/features/user/aplication/usecase/add_user_use_case.dart';
 import 'package:devti_agro/features/user/aplication/usecase/delete_user_use_case.dart';
+import 'package:devti_agro/features/user/aplication/usecase/show_user_use_case.dart';
 import 'package:devti_agro/features/user/aplication/usecase/update_user_use_case.dart';
 import 'package:devti_agro/features/user/aplication/usecase/user_use_case.dart';
 import 'package:devti_agro/features/user/infrastructure/data/user_remote_data_source.dart';
@@ -121,9 +124,13 @@ Future<void> init() async {
   sl.registerFactory(() => PermissionBloc(permissionUseCase: sl()));
   sl.registerFactory(() => FournisseurBloc(fournisseurUseCase: sl()));
 
+  sl.registerFactory(() => ShowUserBloc(showUserUseCase: sl()));
+
   // Add the ThemeBloc registration
   sl.registerFactory(() => ThemeBloc());
   sl.registerFactory(() => AuthBloc());
+
+  sl.registerFactory(()=> LanguageBloc());
 
   // Use Cases ____________________________________________________________________________
 
@@ -186,6 +193,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteUserUseCase(userRepo: sl()));
   sl.registerLazySingleton(() => AddUserUseCase(userRepo: sl()));
   sl.registerLazySingleton(() => UpdateUserUsecase(userRepo: sl()));
+  sl.registerLazySingleton(() => ShowUserUseCase(userRepo: sl()));
 
   /*____________________________________ Repository ____________________________________*/
 

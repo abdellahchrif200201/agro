@@ -4,6 +4,7 @@ import 'package:devti_agro/features/Fournisseur/aplication/model/Fournisseur_mod
 import 'package:http/http.dart' as http;
 
 import '../../../../core/api/api_route.dart';
+import '../../../../core/utils/loger.dart';
 
 abstract class FournisseurRemoteDataSource {
   Future<List<FournisseurModel>> getAllFournisseur();
@@ -22,7 +23,7 @@ class FournisseurRemoteDataSourceImplement implements FournisseurRemoteDataSourc
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      logger.d(response.body);
       final Map<String, dynamic> decodedJson = json.decode(response.body) as Map<String, dynamic>;
       final List<dynamic> data = decodedJson['data'];
 
@@ -30,7 +31,7 @@ class FournisseurRemoteDataSourceImplement implements FournisseurRemoteDataSourc
 
       return roleModel;
     } else {
-       print(response.body);
+       logger.d(response.body);
       throw ServerException();
     }
   }

@@ -14,3 +14,13 @@ class GetAllUserEvent extends UserEvent {
 }
 
 class RefreshUserEvent extends UserEvent {}
+
+
+class SearchUserEvent extends UserEvent {
+  final String searchText;
+
+  const SearchUserEvent(this.searchText);
+
+  @override
+  List<Object> get props => [searchText];
+}

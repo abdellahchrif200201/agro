@@ -11,6 +11,11 @@ class CheckList {
   final String? userName;
   final String? message;
 
+
+   final int? pageFrom;
+  final int? pageCurrent;
+  final int? lastPage;
+
   CheckList({
     this.id,
     this.tasksName ,
@@ -22,7 +27,11 @@ class CheckList {
     this.type,
     this.userId,
     this.userName,
-    this.message
+    this.message,
+
+    this.pageFrom,
+    this.lastPage,
+    this.pageCurrent
      // Provide a default value if description can be null
   });
 }

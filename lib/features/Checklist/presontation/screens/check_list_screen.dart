@@ -1,5 +1,7 @@
 // import 'package:devti_agro/core/router/routes.dart';
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/widgets/custom_appbar/Custom_appbar.dart';
+import 'package:devti_agro/core/widgets/custom_data_is_empty/custom_data_is_empty.dart';
 import 'package:devti_agro/core/widgets/custom_drawer/custom_drawer.dart';
 import 'package:devti_agro/core/widgets/custom_filter_button/CustomFilter.dart';
 import 'package:devti_agro/core/widgets/custom_refresh_error/refresh_data_in_screen.dart';
@@ -7,8 +9,10 @@ import 'package:devti_agro/core/widgets/date_range_picker/date_range_picker.dart
 import 'package:devti_agro/core/widgets/loading_widget.dart';
 import 'package:devti_agro/core/widgets/search_bar.dart/custom_search_bar.dart';
 import 'package:devti_agro/features/Checklist/application/bloc/get_all_check_list/check_list_bloc.dart';
+// import 'package:devti_agro/features/Checklist/presontation/screens/Add.dart';
 import 'package:devti_agro/features/Checklist/presontation/screens/create_Checklist_screen.dart';
 import 'package:devti_agro/features/Checklist/presontation/widgets/check_list_filter_helper.dart';
+import 'package:devti_agro/generated/l10n.dart';
 // packages
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,14 +43,16 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
       context.read<CheckListBloc>().add(FilterCheckListByDateRangeEvent(dateRange: dateRange));
     }
 
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
+
     return Scaffold(
       appBar: CustomAppbar(
         isShowLogin: false,
         elevation: 1,
-        title: "Check list",
-        trailingIcon: const FaIcon(
+        title: S.of(context).checklist,
+        trailingIcon: FaIcon(
           FontAwesomeIcons.circlePlus,
-          color: Colors.black,
+          color: themeBloc ? const Color(0xFFFFFFFF) : Colors.black,
           size: 30,
         ),
         trailingAction: () {
@@ -57,8 +63,8 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
           );
         },
       ),
-      drawer: const CustomDrawer(
-        currentRoute: "Checklist",
+      drawer: CustomDrawer(
+        currentRoute: S.of(context).checklist,
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -92,6 +98,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 30),
               BlocBuilder<CheckListBloc, CheckListState>(
                 builder: (context, state) {
                   // print('Current state: $state'); // Log the current state
@@ -101,7 +108,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   } else if (state is LoadedCheckListState) {
                     final checkLists = state.checkList;
                     if (checkLists.isEmpty) {
-                      return const Center(child: Text('No data available.'));
+                      return CustomDataIsEmpty(onPressed: () => context.read<CheckListBloc>().add(RefreshCkeckListEvent()));
                     }
                     return Column(
                       children: checkLists.map((checkList) {

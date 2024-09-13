@@ -43,7 +43,7 @@ class ListProductsWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("100"),
+                  Text("1010"),
                 ],
               ),
             ),

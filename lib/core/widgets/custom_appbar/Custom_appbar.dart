@@ -37,19 +37,28 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
     return AppBar(
       backgroundColor: themeBloc ? const Color(0xff000000) : const Color(0xffFAFAFA),
-      title: Row(
-        mainAxisAlignment: isShowLogin ? MainAxisAlignment.center : MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
+      title: isShowLogin != false
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                 ),
-          ),
-          if (isShowLogin) const CustomLogin()
-        ],
-      ),
-      centerTitle: false,
+                CustomLogin()
+              ],
+            )
+          : Text(
+              title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+      centerTitle: true,
       elevation: elevation ?? 3.0, // Provide a default value if elvation is null
       leading: leadingIcon != null
           ? IconButton(

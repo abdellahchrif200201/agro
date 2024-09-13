@@ -13,20 +13,28 @@ class UserModel extends User {
     super.telephone,
     super.ville,
     required super.entrepriseId,
+    super.lastPage,
+    super.pageCurrent,
+    super.pageFrom,
   });
 
   /// Creates a new instance of [UserModel] from a JSON object.
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    final data = json['data'];
+    final meta = json['meta'];
     return UserModel(
-      id: json['id'] as int?,
-      name: json['name'] as String,
-      adresse: json['adresse'] as String?,
-      email: json['email'] as String?,
-      image: json['image'] as String?,
-      pays: json['pays'] as String?,
-      telephone: json['telephone'] as String?,
-      ville: json['ville'] as String?,
-      entrepriseId: json['Entreprise']['id'],
+      id: data['id'] as int?,
+      name: data['name'] as String,
+      adresse: data['adresse'] as String?,
+      email: data['email'] as String?,
+      image: data['image'] as String?,
+      pays: data['pays'] as String?,
+      telephone: data['telephone'] as String?,
+      ville: data['ville'] as String?,
+      entrepriseId: data['Entreprise']['id'] as int,
+      pageCurrent: meta['current_page'] as int?,
+      pageFrom: meta['from'] as int?,
+      lastPage: meta['last_page'] as int?,
     );
   }
 

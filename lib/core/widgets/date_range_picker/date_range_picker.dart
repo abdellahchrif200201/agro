@@ -1,6 +1,8 @@
 import 'package:devti_agro/core/config/constants/assets.dart';
+import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +43,8 @@ class _DateRangePickerState extends State<DateRangePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final themeBloc = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
+
     final DateFormat dateFormat = DateFormat('MMM dd, yyyy');
 
     return Row(
@@ -53,7 +57,7 @@ class _DateRangePickerState extends State<DateRangePicker> {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
+              border: Border.all(color: themeBloc ? Colors.white : Colors.black),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -65,6 +69,7 @@ class _DateRangePickerState extends State<DateRangePicker> {
                     Assets.kSvgDate,
                     height: 40,
                     width: 40,
+                    color: themeBloc ? Colors.white : Colors.black,
                   ),
                 ),
                 const SizedBox(width: 2),

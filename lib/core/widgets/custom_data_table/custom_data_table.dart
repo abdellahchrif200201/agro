@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class CustomDataTable extends StatefulWidget {
   final List<List<String>> rowsData;
   final List<String> headerTitles;
   final Function(int rowIndex)? onEditPressed;
   final Function(int rowIndex)? onDeletePressed;
-  final int initialPage; // Parameter to set the initial page
-  final int rowsPerPage; // Number of rows per page
+  final int initialPage;
+  final int rowsPerPage;
   final int allPage;
   final int pageNow;
-  final VoidCallback? onPressNextPage; // Callback for next page button
-  final VoidCallback? onPressPreviousPage; // Callback for previous page button
+  final VoidCallback? onPressNextPage;
+  final VoidCallback? onPressPreviousPage;
 
-  const CustomDataTable(
-      {super.key,
-      required this.rowsData,
-      required this.headerTitles,
-      this.onEditPressed,
-      this.onDeletePressed,
-      this.initialPage = 0,
-      this.rowsPerPage = 20,
-      this.onPressNextPage,
-      this.onPressPreviousPage,
-      this.allPage = 1,
-      this.pageNow = 1});
+  const CustomDataTable({
+    super.key,
+    required this.rowsData,
+    required this.headerTitles,
+    this.onEditPressed,
+    this.onDeletePressed,
+    this.initialPage = 0,
+    this.rowsPerPage = 20,
+    this.onPressNextPage,
+    this.onPressPreviousPage,
+    this.allPage = 1,
+    this.pageNow = 1,
+  });
 
   @override
   State<CustomDataTable> createState() => _CustomDataTableState();
@@ -35,20 +37,19 @@ class _CustomDataTableState extends State<CustomDataTable> {
   int sortColumnIndex = 0;
   late int currentPage;
   late int rowsPerPage;
+  late List<bool> isDeleting;
 
   @override
   void initState() {
     super.initState();
-    currentPage = widget.initialPage; // Initialize currentPage with the parameter
-    rowsPerPage = widget.rowsPerPage; // Initialize rowsPerPage with the parameter
+    currentPage = widget.initialPage;
+    rowsPerPage = widget.rowsPerPage;
+    isDeleting = List.filled(widget.rowsData.length, false);
   }
 
   @override
   Widget build(BuildContext context) {
     final int totalRows = widget.rowsData.length;
-    // final int totalPages = (totalRows / rowsPerPage).ceil();
-
-    // Calculate the paginated rows
     final startIndex = currentPage * rowsPerPage;
     final endIndex = (currentPage + 1) * rowsPerPage;
     final paginatedRows = widget.rowsData.sublist(
@@ -59,9 +60,9 @@ class _CustomDataTableState extends State<CustomDataTable> {
     return Column(
       children: [
         SingleChildScrollView(
-          scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+          scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
-            scrollDirection: Axis.vertical, // Enable vertical scrolling if needed
+            scrollDirection: Axis.vertical,
             child: Theme(
               data: Theme.of(context).copyWith(
                 dividerColor: const Color(0xFFD8D8D8),
@@ -70,7 +71,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                 sortAscending: isAscendingOrder,
                 headingRowColor: MaterialStateColor.resolveWith((states) => const Color(0xffFAFAFA)),
                 sortColumnIndex: sortColumnIndex,
-                columnSpacing: 20.w,
+                columnSpacing: 20,
                 columns: [
                   ...widget.headerTitles.map(
                     (headerTitle) {
@@ -117,7 +118,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                 ],
                 rows: paginatedRows.asMap().entries.map(
                   (entry) {
-                    final index = entry.key + startIndex; // Adjust index based on pagination
+                    final index = entry.key + startIndex;
                     final row = entry.value;
 
                     return DataRow(
@@ -129,7 +130,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: const Color(0xff000000),
-                                fontSize: 12.sp,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
                             );
@@ -149,7 +150,7 @@ class _CustomDataTableState extends State<CustomDataTable> {
                                         backgroundColor: temperature > 25 ? Colors.red[100] : Colors.blue[100],
                                         padding: EdgeInsets.zero,
                                         labelStyle: TextStyle(
-                                          fontSize: 10.sp,
+                                          fontSize: 10,
                                         ),
                                         label: Align(
                                           alignment: Alignment.centerLeft,
@@ -171,14 +172,67 @@ class _CustomDataTableState extends State<CustomDataTable> {
                         ).toList(),
                         DataCell(
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: widget.onEditPressed != null ? () => widget.onEditPressed!(index) : null,
+                              Container(
+                                width: 40,
+                                margin: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                  child: IconButton(
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: widget.onEditPressed != null ? () => widget.onEditPressed!(index) : null,
+                                  ),
+                                ),
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: widget.onDeletePressed != null ? () => widget.onDeletePressed!(index) : null,
+                              GestureDetector(
+                                onTap: () {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.info,
+                                    animType: AnimType.rightSlide,
+                                    title: 'Delete chambre',
+                                    desc: 'Are you sure?',
+                                    titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                                    descTextStyle: Theme.of(context).textTheme.titleMedium,
+                                    btnOkText: 'Delete',
+                                    btnCancelOnPress: () {
+                                      setState(() {
+                                        isDeleting[index] = false;
+                                      });
+                                    },
+                                    btnOkOnPress: () async {
+                                      setState(() {
+                                        isDeleting[index] = true;
+                                      });
+                                      if (widget.onDeletePressed != null) {
+                                        await widget.onDeletePressed!(index);
+                                        setState(() {
+                                          isDeleting[index] = false;
+                                        });
+                                      }
+                                    },
+                                  ).show();
+                                },
+                                child: Container(
+                                  width: 40,
+                                  margin: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                    child: isDeleting[index]
+                                        ? LoadingAnimationWidget.fallingDot(
+                                            color: Colors.green,
+                                            size: 30,
+                                          )
+                                        : const Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                          ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -191,30 +245,32 @@ class _CustomDataTableState extends State<CustomDataTable> {
             ),
           ),
         ),
-        // Pagination controls
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // To First Page Button
-
-              // Previous Page Button
-              IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: widget.onPressPreviousPage,
-              ),
-              // Page Number Display
-              Text('Page ${widget.pageNow} of ${widget.allPage}'),
-              // Next Page Button
-              IconButton(
-                icon: const Icon(Icons.arrow_forward),
-                onPressed: widget.onPressNextPage,
-              ),
-              // To Last Page Button
-            ],
-          ),
-        ),
+        // if( if (widget.allPage > 1))
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Column(
+        //     children: [
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: [
+        //           IconButton(
+        //             icon: const Icon(
+        //               Icons.chevron_left,
+        //             ),
+        //             onPressed: widget.onPressPreviousPage,
+        //           ),
+        //           Text('Page ${widget.pageNow} of ${widget.allPage}'),
+        //           IconButton(
+        //             icon: const Icon(
+        //               Icons.chevron_right,
+        //             ),
+        //             onPressed: widget.onPressNextPage,
+        //           ),
+        //         ],
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

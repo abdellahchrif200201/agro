@@ -7,6 +7,8 @@ import 'package:devti_agro/features/Checklist/domain/entities/check_list.dart';
 import 'package:devti_agro/features/Checklist/infrastructure/datasource/checkList_remote_data_source.dart';
 import 'package:devti_agro/features/Checklist/infrastructure/repositories/check_list_repositories.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/utils/loger.dart';
 // import 'package:flutter/material.dart';
 
 typedef Future<Unit> DeleteOrUpdateOrAddTash();
@@ -17,7 +19,7 @@ class CheckListRepositoriesImplement implements CheckListRepositories {
   final NetworkInfo networkInfo;
 
   CheckListRepositoriesImplement({required this.checklistRemoteDataSource, required this.networkInfo});
-
+  
   @override
   Future<Either<Failure, List<CheckList>>> getAllCheckList() async {
     if (await networkInfo.isConnected) {
@@ -27,7 +29,7 @@ class CheckListRepositoriesImplement implements CheckListRepositories {
       } on ServerException {
         return left(ServerFailure());
       } catch (e) {
-        print("unexpected error , $e");
+        logger.d("unexpected error , $e");
         return left(UnexpectedFailure());
       }
     } else {
@@ -50,7 +52,7 @@ class CheckListRepositoriesImplement implements CheckListRepositories {
             return createdAt.isAfter(dateRange.start) && createdAt.isBefore(dateRange.end);
           } catch (e) {
             // Handle parsing error if date is not valid
-            print('Date parsing error: $e');
+            logger.d('Date parsing error: $e');
             return false;
           }
         }).toList();
@@ -59,7 +61,7 @@ class CheckListRepositoriesImplement implements CheckListRepositories {
       } on ServerException {
         return left(ServerFailure());
       } catch (e) {
-        print('Unexpected error: $e');
+        logger.d('Unexpected error: $e');
         return left(UnexpectedFailure());
       }
     } else {
@@ -80,7 +82,7 @@ class CheckListRepositoriesImplement implements CheckListRepositories {
       } on ServerException {
         return left(ServerFailure());
       } catch (e) {
-        print('Unexpected error: $e');
+        logger.d('Unexpected error: $e');
         return left(UnexpectedFailure());
       }
     } else {

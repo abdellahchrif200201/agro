@@ -6,6 +6,7 @@ import "package:devti_agro/features/chambre/application/models/chambre_model.dar
 import "package:http/http.dart" as http;
 
 import "../../../../core/api/api_route.dart";
+import "../../../../core/utils/loger.dart";
 
 abstract class ChambreRemoteDataSource {
   Future<List<ChambreModel>> getAllChambre(int page);
@@ -34,7 +35,7 @@ class ChambreRemoteDataSourceImplement implements ChambreRemoteDataSource {
         return ChambreModel.fromJson({'data': jsonChambreModel, 'meta': decodedJson['meta']});
       }).toList();
 
-      print(decodedJson['meta']);
+      logger.d(decodedJson['meta']);
 
       return chambresModel;
     } else {
@@ -58,20 +59,22 @@ class ChambreRemoteDataSourceImplement implements ChambreRemoteDataSource {
     final responseBody = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      print("created succseful");
+      logger.d("created succseful");
+
+      logger.d(responseBody);
 
       if (responseBody["status"] == 201) {
         // Login successful, save the token
 
-        print(responseBody);
-        print("create sucsses");
+        logger.d(responseBody);
+        logger.d("create sucsses");
         return Future.value(unit);
       } else {
         // Handle unexpected response codes or messages
         throw ServerException(message: responseBody["message  "] ?? "Unexpected error");
       }
     } else {
-      print("no create chambres");
+      logger.d("no create chambres");
       final errorMessage = responseBody["error"] ?? "Server error";
       throw ServerException(message: errorMessage);
     }
@@ -96,8 +99,8 @@ class ChambreRemoteDataSourceImplement implements ChambreRemoteDataSource {
     final chambreId = chambreModel.id.toString();
     final chambreZONE = chambreModel.zoneId.toString();
 
-    print("chambre id $chambreId");
-    print("zone id $chambreZONE ");
+    logger.d("chambre id $chambreId");
+    logger.d("zone id $chambreZONE ");
 
     final body = jsonEncode({"Name": chambreModel.name, "ZoneId": chambreModel.zoneId, "Surface": chambreModel.surface, "Temperature": chambreModel.temperature});
 
@@ -108,10 +111,10 @@ class ChambreRemoteDataSourceImplement implements ChambreRemoteDataSource {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
+      logger.d(response.body);
       return Future.value(unit);
     } else {
-      print(response.body);
+      logger.d(response.body);
 
       throw ServerException();
     }

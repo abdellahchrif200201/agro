@@ -2,7 +2,7 @@ import 'package:devti_agro/core/widgets/Custom_FilterBottomSheet/FilterBottomShe
 import 'package:devti_agro/features/chambre/application/bloc/get_chambres_bloc/chambres_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 
 class ChambreFilterHelper {
   final BuildContext context;
@@ -26,7 +26,7 @@ class ChambreFilterHelper {
             BlocProvider.of<ChambresBloc>(context).add(const FilterChambresEvent(filterType: 'nom', isAscending: false));
             isAsN = true;
           }
-          context.pop();
+          Navigator.pop(context);
         },
         'temperature': () {
           if (isAsT) {
@@ -36,7 +36,7 @@ class ChambreFilterHelper {
             BlocProvider.of<ChambresBloc>(context).add(const FilterChambresEvent(filterType: 'temperature', isAscending: false));
             isAsT = true;
           }
-          context.pop();
+          Navigator.pop(context);
         },
         'surface': () {
           if (isAsS) {
@@ -46,7 +46,7 @@ class ChambreFilterHelper {
             BlocProvider.of<ChambresBloc>(context).add(const FilterChambresEvent(filterType: 'surface', isAscending: false));
             isAsS = true;
           }
-          context.pop();
+          Navigator.pop(context);
         },
       },
     );

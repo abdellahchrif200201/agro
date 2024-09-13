@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:devti_agro/core/error/exeptions.dart';
 import 'package:devti_agro/features/auth/login/aplication/model/Login_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +18,8 @@ class LoginRemoteDataSourceImpl extends LoginRemoteDataSource {
   final http.Client client;
 
   LoginRemoteDataSourceImpl({required this.client});
+
+  var logger = Logger();
 
   @override
   Future<Unit> loginAuth(LoginModel loginModel) async {
@@ -40,11 +43,20 @@ class LoginRemoteDataSourceImpl extends LoginRemoteDataSource {
         // Login successful, save the token
         final prefs = await SharedPreferences.getInstance();
         final token = responseBody['token'];
-        await prefs.setString('auth_token', token);
-        await prefs.setString('name', responseBody['user']['name']);
 
-        print(responseBody);
-        print("Login successful");
+        logger.d(token);
+
+        // Save token
+        await prefs.setString('auth_token', token);
+
+        // Save user info
+        final user = responseBody['user'];
+        final userJson = jsonEncode(user);
+        await prefs.setString('user_info', userJson);
+
+        logger.d(responseBody);
+        logger.d("Login successful");
+
         return Future.value(unit);
       } else {
         // Handle unexpected response codes or messages

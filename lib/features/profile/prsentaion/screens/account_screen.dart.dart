@@ -1,19 +1,24 @@
-import 'dart:io';
 import 'package:devti_agro/core/config/theme/bloc/theme_bloc.dart';
 import 'package:devti_agro/core/config/theme/bloc/theme_event.dart';
+import 'package:devti_agro/core/utils/user_info_service.dart';
+import 'package:devti_agro/core/widgets/custom_icon_back/icon_back.dart';
 import 'package:devti_agro/features/auth/login/presontaion/screens/login_screen.dart';
 import 'package:devti_agro/features/profile/prsentaion/screens/add_user_screen.dart';
 import 'package:devti_agro/features/profile/prsentaion/screens/all_users_screen.dart';
-import 'package:devti_agro/features/profile/prsentaion/screens/edit_account_screen.dart';
+// import 'package:devti_agro/features/profile/prsentaion/screens/add_user_screen.dart';
+// import 'package:devti_agro/features/profile/prsentaion/screens/all_users_screen.dart';
+import 'package:devti_agro/features/profile/prsentaion/screens/full_user_information.dart';
 import 'package:devti_agro/features/profile/prsentaion/widgets/forward_button.dart';
 import 'package:devti_agro/features/profile/prsentaion/widgets/setting_item.dart';
 import 'package:devti_agro/features/profile/prsentaion/widgets/setting_switch.dart';
+import 'package:devti_agro/features/test/langage.dart';
+import 'package:devti_agro/features/user/domain/entities/user.dart';
+import 'package:devti_agro/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:image_picker/image_picker.dart'; // Add this import
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -24,25 +29,30 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   bool isDarkMode = false;
-  XFile? _image;
-  final ImagePicker _picker = ImagePicker();
 
-  Future<void> _pickImage() async {
-    final XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        _image = pickedImage;
-      });
-    }
+  Map<String, dynamic>? _userInfo;
+  final UserInfoService _userInfoService = UserInfoService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
   }
 
-  Future<void> _loadUserData(BuildContext context) async {
+  Future<void> _loadUserInfo() async {
+    final userInfo = await _userInfoService.getUserInfo();
+    setState(() {
+      _userInfo = userInfo;
+    });
+  }
+
+  Future<void> _logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("auth_token");
     prefs.remove("name");
 
     // Navigate to login or another screen after logout
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
@@ -51,17 +61,17 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     final themeBloc = BlocProvider.of<ThemeBloc>(context);
+    // final theme = BlocProvider.of<ThemeBloc>(context).state.isDarkMode;
+
     return Scaffold(
+      // backgroundColor: theme ? Color(0xff212121) : Colors.white,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
-            Ionicons.chevron_back_outline,
-            color: Theme.of(context).iconTheme.color,
-          ),
+          icon: const IconBack(),
         ),
         leadingWidth: 80,
       ),
@@ -71,17 +81,17 @@ class _AccountScreenState extends State<AccountScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Paramètres",
-                style: TextStyle(
+              Text(
+                S.of(context).settings,
+                style: const TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 40),
-              const Text(
-                "Compte",
-                style: TextStyle(
+              Text(
+                S.of(context).account,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
                 ),
@@ -91,61 +101,75 @@ class _AccountScreenState extends State<AccountScreen> {
                 width: double.infinity,
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap: _pickImage, // Trigger image picker on tap
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(35),
-                            image: _image == null
-                                ? const DecorationImage(
-                                    image: AssetImage(
-                                      "assets/images/avatar.png",
-                                    ),
-                                    fit: BoxFit.cover)
-                                : DecorationImage(image: FileImage(File(_image!.path)), fit: BoxFit.cover)),
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(35),
+                        image: const DecorationImage(
+                          image: AssetImage("assets/images/avatar.png"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 20),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Uranus Code",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
+                    if (_userInfo != null)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _userInfo!['name'],
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          "Youtube Channel",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "Youtube Channel",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          )
+                        ],
+                      )
+                    else
+                      const CircularProgressIndicator(),
                     const Spacer(),
                     ForwardButton(
                       onTap: () {
-                        if (5 == 5) {
+                        if (_userInfo != null) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const EditAccountScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => FullUserInformation(
+                                user: User(
+                                  id: _userInfo!['id'],
+                                  name: _userInfo!['name'],
+                                  entrepriseId: _userInfo!['EntrepriseId'],
+                                  adresse: _userInfo!['Adresse'],
+                                  email: _userInfo!['email'],
+                                  image: _userInfo!['Image'],
+                                  pays: _userInfo!['name'],
+                                  telephone: _userInfo!['Telephone'],
+                                  ville: _userInfo!['Ville'],
+                                ),
+                              ),
+                            ),
                           );
                         } else {
                           AwesomeDialog(
                             context: context,
                             dialogType: DialogType.info,
                             animType: AnimType.rightSlide,
-                            title: 'Connexion',
-                            desc: " Vous n'êtes pas connecté(e)",
+                            title: S.of(context).login,
+                            desc: S.of(context).not_login,
                             titleTextStyle: Theme.of(context).textTheme.titleMedium,
                             descTextStyle: Theme.of(context).textTheme.titleMedium,
-                            btnOkText: 'Connexion',
+                            btnOkText: S.of(context).login,
                             btnCancelOnPress: () {},
                             btnOkOnPress: () => Navigator.push(
                               context,
@@ -154,26 +178,26 @@ class _AccountScreenState extends State<AccountScreen> {
                           ).show();
                         }
                       },
-                    )
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 40),
-              const Text(
-                "Settings",
-                style: TextStyle(
+              Text(
+                S.of(context).settings,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(height: 20),
               SettingItem(
-                title: "Ajouter un utilisateur",
+                title: S.of(context).add_user,
                 icon: Ionicons.add_circle,
                 bgColor: Colors.blue.shade100,
                 iconColor: Colors.blue,
                 onTap: () {
-                  if (5 == 5) {
+                  if (_userInfo != null) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const AddUserScreen()),
@@ -184,10 +208,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       dialogType: DialogType.info,
                       animType: AnimType.rightSlide,
                       title: 'login',
-                      desc: 'you are not login ?',
+                      desc: 'you are not logged in?',
                       titleTextStyle: Theme.of(context).textTheme.titleMedium,
                       descTextStyle: Theme.of(context).textTheme.titleMedium,
-                      btnOkText: 'conextion',
+                      btnOkText: 'connexion',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () => Navigator.push(
                         context,
@@ -199,12 +223,12 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               const SizedBox(height: 20),
               SettingItem(
-                title: "all user",
+                title: S.of(context).all_user,
                 icon: Ionicons.people,
                 bgColor: Colors.blue.shade100,
                 iconColor: Colors.blue,
                 onTap: () {
-                  if (5 == 5) {
+                  if (_userInfo != null) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const AllUsersScreen()),
@@ -215,10 +239,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       dialogType: DialogType.info,
                       animType: AnimType.rightSlide,
                       title: 'login',
-                      desc: 'you are not login ?',
+                      desc: 'you are not logged in?',
                       titleTextStyle: Theme.of(context).textTheme.titleMedium,
                       descTextStyle: Theme.of(context).textTheme.titleMedium,
-                      btnOkText: 'conextion',
+                      btnOkText: 'connexion',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () => Navigator.push(
                         context,
@@ -230,7 +254,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
               const SizedBox(height: 20),
               SettingSwitch(
-                title: "Dark Mode",
+                title: S.of(context).theme,
                 icon: Ionicons.earth,
                 bgColor: Colors.purple.shade100,
                 iconColor: Colors.purple,
@@ -238,13 +262,22 @@ class _AccountScreenState extends State<AccountScreen> {
                 onTap: (value) {
                   setState(() {
                     themeBloc.add(ToggleDarkMode(isDarkMode: value));
-                    ;
                   });
                 },
               ),
               const SizedBox(height: 20),
               SettingItem(
-                title: "Logout",
+                title: S.of(context).language,
+                icon: Ionicons.language,
+                bgColor: Colors.blue.shade100,
+                iconColor: Colors.blue,
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (builder) => LanguageDropdown()));
+                },
+              ),
+              const SizedBox(height: 20),
+              SettingItem(
+                title: S.of(context).logout,
                 icon: Ionicons.log_out,
                 bgColor: Colors.blue.shade100,
                 iconColor: Colors.blue,
@@ -253,16 +286,17 @@ class _AccountScreenState extends State<AccountScreen> {
                     context: context,
                     dialogType: DialogType.info,
                     animType: AnimType.rightSlide,
-                    title: 'Logout',
-                    desc: 'are you sure ?',
+                    title: S.of(context).logout,
+                    desc: S.of(context).are_you_sure,
                     titleTextStyle: Theme.of(context).textTheme.titleMedium,
                     descTextStyle: Theme.of(context).textTheme.titleMedium,
                     btnCancelOnPress: () {},
-                    btnOkOnPress: () => _loadUserData(context),
+                    btnOkOnPress: () => _logout(context),
                   ).show();
                 },
               ),
               const SizedBox(height: 20),
+              // LanguageDropdown()
             ],
           ),
         ),

@@ -21,14 +21,8 @@ class AddChambreBloc extends Bloc<AddChambreEvent, AddChambreState> {
     Emitter<AddChambreState> emit,
   ) async {
     emit(AddChambreLoading());
-    final chambre = Chambre(
-      name: event.name,
-      surface: event.surface,
-      temperature: event.temperature,
-      zoneId: event.zoneId,
-      entrepriseICE: event.entrepriseICE,
-    );
-    final failureOrSuccess = await addChambreUseCase(chambre);
+    
+    final failureOrSuccess = await addChambreUseCase(event.chambre);
 
     emit(
       failureOrSuccess.fold(
